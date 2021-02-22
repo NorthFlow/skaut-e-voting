@@ -6,7 +6,7 @@ import {  Router, Route, Switch } from "react-router-dom";
 import useToken from './components/App/useToken';
 // core components
 import Admin from "layouts/Admin";
-import Login from "views/LoginPage/Login";
+import Login from "views/LoginPage/LoginClass";
 
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 
@@ -25,16 +25,16 @@ function App() {
         </div>
     );
 
+    
     if(!token) {
         return <Login setToken={setToken} />
       }
-
+      
     return (
         
         <div>
         <Router history={hist}>
             <Switch>
-
 
             <Route path="/" component={Admin} />
             <Route path="/admin" component={Admin} />

@@ -9,7 +9,7 @@ class Logout extends Component {
     };
 
   componentDidMount() {
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
     this.setState({
         readyToRedirect: true
       });

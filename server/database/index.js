@@ -36,10 +36,11 @@ userdb.getAllUsers = () => {
 
 userdb.login = (login, password) => {
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT * FROM user`, [login],(err, result) => {
+        connection.query(`SELECT * FROM users WHERE users.login = ?`, [login],(err, result) => {
             if (err) {
                 throw err
-            }   
+            } 
+
             if (result == undefined || result == null || result == '' ) {
                 // console.log("Invalid password or login !");
                 reject( 'Invalid password or login');
