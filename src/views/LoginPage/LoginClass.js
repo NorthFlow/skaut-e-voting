@@ -14,6 +14,9 @@ import Container from '@material-ui/core/Container';
 
 import { Switch, Route, Redirect, useHistory } from "react-router-dom";
 
+import { BrowserRouter } from 'react-router-dom';
+import { render } from 'react-dom';
+
 import PropTypes from 'prop-types';
 import logo from 'assets/img/raise-hand-blue.png';
 
@@ -131,7 +134,11 @@ class LoginClass extends Component{
       
       
       //return <Redirect to="/" />;
-
+      return(
+        <BrowserRouter>
+          <Redirect to="/admin/dashboard" />
+        </BrowserRouter>
+      )
     }
 
     return (
