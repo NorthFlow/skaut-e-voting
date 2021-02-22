@@ -97,7 +97,6 @@ class LoginClass extends Component{
         console.log(localStorage.getItem("token"));
         console.log('');
         this.loadDataAfterSuccessLogin();
-        //this.goThere();
       })
       .catch(err => {
         if (err.response) {
@@ -122,10 +121,6 @@ class LoginClass extends Component{
     });
   }
 
-  goThere() {
-    let history = useHistory();
-    history.push("/admin");
-  }
 
   render() {  
     if ( localStorage.getItem("token") ) {
@@ -133,12 +128,8 @@ class LoginClass extends Component{
       console.log(localStorage.getItem("token"));
       
       
-      //return <Redirect to="/" />;
-      return(
-        <BrowserRouter>
-          <Redirect to="/admin/dashboard" />
-        </BrowserRouter>
-      )
+      return <Redirect to="/admin/dashboard" />;
+      
     }
 
     return (
@@ -212,10 +203,6 @@ class LoginClass extends Component{
 
 
 
-}
-
-LoginClass.propTypes = {
-  setToken: PropTypes.func.isRequired
 }
 
 

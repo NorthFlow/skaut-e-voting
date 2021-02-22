@@ -19,11 +19,14 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from 'App';
 
+
+import { BrowserRouter } from 'react-router-dom';
+
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>,
   document.getElementById('root')
 );

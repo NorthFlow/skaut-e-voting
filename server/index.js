@@ -9,8 +9,8 @@ const apiRouterVoting = require('./routes/voting');
 const cors = require('cors');
 
 const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(pino);
+//app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(pino);
 
 //Simple Usage (Enable All CORS Requests)
 app.use(cors())

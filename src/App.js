@@ -6,9 +6,11 @@ import {  Router, Route, Switch } from "react-router-dom";
 import useToken from './components/App/useToken';
 // core components
 import Admin from "layouts/Admin";
-import Login from "views/LoginPage/LoginClass";
+import LoginClass from "views/LoginPage/LoginClass";
 
 import "assets/css/material-dashboard-react.css?v=1.9.0";
+
+
 
 const hist = createBrowserHistory();
 
@@ -26,18 +28,20 @@ function App() {
     );
 
     
-    if(!token) {
-        return <Login setToken={setToken} />
+    if(!localStorage.getItem("token")) {
+        return <LoginClass  />
       }
       
+
+
     return (
         
         <div>
         <Router history={hist}>
             <Switch>
 
-            <Route path="/" component={Admin} />
             <Route path="/admin" component={Admin} />
+            <Route path="/" component={Admin} />
 
             <Route component={Page404} />
             </Switch> 
