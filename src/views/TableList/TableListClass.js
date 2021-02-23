@@ -10,6 +10,10 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 
+import MyModal from "../../components/Modal/MyModal";
+
+import { Modal,ModalManager,Effect} from 'react-dynamic-modal';
+
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
@@ -56,6 +60,11 @@ class  TableListClass extends Component {
   componentDidMount() {
     this.loadDataAfterSuccessLogin();
   }
+
+  openModal(){
+    // const text = this.refs.input.value;
+    ModalManager.open(<MyModal text="Tralala" onRequestClose={() => true}/>);
+ }
 
   loadDataAfterSuccessLogin = () => {
     //console.log("SPUSTAM NACITAVANIE");
@@ -108,6 +117,7 @@ render(){
               tableHeaderColor="primary"
               tableHead={["Číslo", "Krátky popis", "Id_voting", ""]}
               tableData= {this.state.DataForTable}
+              clickButton={this.openModal.bind(this)}
             />
           </CardBody>
         </Card>

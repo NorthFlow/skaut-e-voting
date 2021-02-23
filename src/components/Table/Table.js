@@ -15,7 +15,7 @@ const useStyles = makeStyles(styles);
 
 export default function CustomTable(props) {
   const classes = useStyles();
-  const { tableHead, tableData, tableHeaderColor } = props;
+  const { tableHead, tableData, tableHeaderColor, clickButton } = props;
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
@@ -45,7 +45,7 @@ export default function CustomTable(props) {
                     
                     return (
                       <TableCell className={classes.tableCell} key={key}>
-                        <Button>Zahlasuj</Button>
+                        <Button onClick={clickButton}>Zahlasuj</Button>
                       </TableCell>
                     );
                     
