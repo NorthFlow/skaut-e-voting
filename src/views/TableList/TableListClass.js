@@ -64,7 +64,7 @@ class  TableListClass extends Component {
     .then(res => {
       let tmpArray = [[]];
       for(var i=0; i< res.data.length; i++){
-        var dataPom = [JSON.stringify(res.data[i].id_question), res.data[i].wording, JSON.stringify(res.data[i].id_voting)];
+        var dataPom = [JSON.stringify(res.data[i].id_question), res.data[i].wording, JSON.stringify(res.data[i].name), true];
         tmpArray.push(dataPom);
       }
 
@@ -106,7 +106,7 @@ render(){
           <CardBody>
             <Table
               tableHeaderColor="primary"
-              tableHead={["Číslo", "Krátky popis", "Id_voting"]}
+              tableHead={["Číslo", "Krátky popis", "Id_voting", ""]}
               tableData= {this.state.DataForTable}
             />
           </CardBody>
