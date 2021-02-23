@@ -124,11 +124,11 @@ class LoginClass extends Component{
 
   render() {  
     if ( localStorage.getItem("token") ) {
-      console.log('TOKEN MAME!!!');
-      console.log(localStorage.getItem("token"));
+      //console.log('TOKEN MAME!!!');
+      //console.log(localStorage.getItem("token"));
       
       
-      return <Redirect to="/admin/dashboard" />;
+      return <Redirect to="/admin" />;
       
     }
 
@@ -138,7 +138,7 @@ class LoginClass extends Component{
         <div className={this.state.classes.paper} >
           <img src={logo} alt="logo" className={this.state.classes.img} style={{"width" : "10%"}} />
           <Typography component="h1" variant="h5" >
-            Prihlás sa
+            Skautský e-voting
           </Typography>
           <form className={this.state.classes.form} noValidate onSubmit={this.login}>
             <TextField
@@ -167,32 +167,18 @@ class LoginClass extends Component{
 
               onChange={this.handleFormChange}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Zapamätať si ma"
-            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={this.state.classes.submit}
+
+              style={{"marginTop" : "30px"}}
             >
               Prihlásiť sa
             </Button>
 
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Zabudol si svoje heslo?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Nemáš konto? Požidaj oň."}
-                </Link>
-              </Grid>
-            </Grid>
           </form>
         </div>
         <Box mt={8}>
