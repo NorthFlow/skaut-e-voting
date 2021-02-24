@@ -72,14 +72,13 @@ userdb.getAllQuestions = () => {
 // --- return list of
 userdb.getAllUserVotings = (user_id) => {
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT id_voting ,name , 
-            CASE accept_answ WHEN 0 THEN 'Nie' WHEN 1 THEN 'Áno' END , 
+        connection.query(`SELECT id_voting ,name , CASE accept_answ WHEN 0 THEN 'Nie' WHEN 1 THEN 'Áno' END , 
             CASE secret WHEN 0 THEN 'Nie' WHEN 1 THEN 'Áno' END , 
             (SELECT CASE COUNT(*) WHEN 0 THEN "Ešte nehlasované" ELSE "Už zahlasované" END 
-                FROM user_voting WHERE id_user= ? AND user_voting.id_voting=voting.id_voting) 
-            FROM voting WHERE EXISTS (SELECT * FROM user_voting_relation where user_voting_relation.can_vote=1 
+                FROM user_voting  WHERE id_user= ? AND user_voting.id_voting=voting.id_voting) 
+            FROM voting  WHERE EXISTS (SELECT * FROM user_voting_relation  where user_voting_relation.can_vote=1 
             AND user_voting_relation.id_user= ? AND voting.id_voting=user_voting_relation.id_voting) 
-            ORDER BY id_voting ASC`,[user_id], (err, results) => {
+            ORDER BY id_voting ASC`,[user_id, user_id], (err, results) => {
             if (err) {
                 return reject(err);
             }

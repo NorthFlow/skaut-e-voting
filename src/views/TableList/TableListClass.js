@@ -69,11 +69,12 @@ class  TableListClass extends Component {
   loadDataAfterSuccessLogin = () => {
     //console.log("SPUSTAM NACITAVANIE");
     //LOAD poistovne
-    Axios.get('http://localhost:4001/voting/questions')
+    console.log(localStorage.getItem("token"));
+    Axios.get('http://localhost:4001/voting/all-votings/' + localStorage.getItem("token"))
     .then(res => {
       let tmpArray = [[]];
       for(var i=0; i< res.data.length; i++){
-        var dataPom = [JSON.stringify(res.data[i].id_question), res.data[i].wording, JSON.stringify(res.data[i].name), true];
+        var dataPom = [JSON.stringify(res.data[i].id_voting), res.data[i].name, true];
         tmpArray.push(dataPom);
       }
 
@@ -109,13 +110,13 @@ render(){
           <CardHeader color="primary">
             <h4 className={this.state.classes.cardTitleWhite}>Hlasovanie malý snem 2021</h4>
             <p className={this.state.classes.cardCategoryWhite}>
-              V tejto tabuľké nájdete konkrétne body hlasovania nastavené pre Malý snem SLSK 2021.
+              V tejto tabuľké nájdete konkrétne hlasovania nastavené pre Malý snem SLSK 2021.
             </p>
           </CardHeader>
           <CardBody>
             <Table
               tableHeaderColor="primary"
-              tableHead={["Číslo", "Krátky popis", "Id_voting", ""]}
+              tableHead={["Číslo", "Krátky popis", ""]}
               tableData= {this.state.DataForTable}
               clickButton={this.openModal.bind(this)}
             />

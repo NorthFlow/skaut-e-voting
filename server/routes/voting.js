@@ -14,4 +14,16 @@ router.get('/questions', async (req,res,next) => {
     }
 });
 
+router.get('/all-votings/:id', async (req,res,next) => {
+    try {
+        let results = await db.getAllUserVotings(req.params.id);
+        res.json(results);
+    } catch(e) {
+        res.status(401).json( {
+            message: e
+        });
+    }
+
+});
+
 module.exports = router;
