@@ -130,17 +130,14 @@ export default function Dashboard() {
               />
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Daily Sales</h4>
+              <h4 className={classes.cardTitle}>Vývoj členstva SLSK</h4>
               <p className={classes.cardCategory}>
-                <span className={classes.successText}>
-                  <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                </span>{" "}
-                increase in today sales.
+                Nárast a pokles registrovaných členov SLSK od roka 2014.
               </p>
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago
+                <AccessTime /> dáta zo systému Tee-pee
               </div>
             </CardFooter>
           </Card>
@@ -158,12 +155,12 @@ export default function Dashboard() {
               />
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
+              <h4 className={classes.cardTitle}>Finančný vývoj SLSK</h4>
+              <p className={classes.cardCategory}>Vývoj výšky transferov na nižšie zložky od roku 2016.</p>
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
+                <AccessTime /> dáta z výročných správ
               </div>
             </CardFooter>
           </Card>
@@ -180,12 +177,12 @@ export default function Dashboard() {
               />
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Completed Tasks</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
+              <h4 className={classes.cardTitle}>Developerské hodiny</h4>
+              <p className={classes.cardCategory}>Čas strávený vývojom tejto aplikácie. Pre vás.</p>
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
+                <AccessTime /> práca dvoch developerov
               </div>
             </CardFooter>
           </Card>

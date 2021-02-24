@@ -91,7 +91,8 @@ class LoginClass extends Component{
         //window.alert("Prihlásenie prebehlo úspešne.");
   
         console.log('success login', res.data)
-        console.log('res.data.user_id: ', res.data.id_user);
+        //console.log('res.data.user_id: ', res.data.id_user);
+        //console.log(res.data);
         localStorage.setItem("token", res.data.id_user);
         localStorage.setItem("user",  JSON.stringify(res.data));
         console.log(localStorage.getItem("token"));
