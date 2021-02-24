@@ -1,17 +1,24 @@
 import React,{Component} from 'react';
-import { Modal,ModalManager,Effect} from 'react-dynamic-modal';
+import { Modal,Effect} from 'react-dynamic-modal';
  
 class MyModal extends Component{
    render(){
-      const { text,onRequestClose } = this.props;
+      const { params,onRequestClose } = this.props;
+      
       return (
          <Modal
             onRequestClose={onRequestClose}
             effect={Effect.SlideFromBottom}>
-            <h1>What you input : {text}</h1>
-            <button>01</button>
-            <button>02</button>
-            <button>03</button>
+               
+               {params.map((questions, index) => {
+                  return (
+                     <ul key={index}>
+                        {questions.map((subItems, sIndex) => {
+                        return <li key={sIndex}> {subItems} </li>;
+                        })}
+                     </ul>
+                  );
+                  })}
          </Modal>
       );
    }

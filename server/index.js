@@ -5,6 +5,7 @@ const pino = require('express-pino-logger')();
 var mysql = require('mysql');
 const apiRouterLogin = require('./routes/user');
 const apiRouterVoting = require('./routes/voting');
+const apiRouterQuestions = require('./routes/questions');
 
 const cors = require('cors');
 
@@ -31,3 +32,4 @@ app.listen(process.env.PORT || '4001', () => {
 
 app.use('/user', apiRouterLogin);
 app.use('/voting', apiRouterVoting);
+app.use('/questions', apiRouterQuestions);

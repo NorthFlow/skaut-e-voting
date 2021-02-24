@@ -3,7 +3,6 @@ import React from 'react';
 import { createBrowserHistory } from "history";
 import {  Router, Route, Switch } from "react-router-dom";
 
-import useToken from './components/App/useToken';
 // core components
 import Admin from "layouts/Admin";
 import LoginClass from "views/LoginPage/LoginClass";
@@ -17,9 +16,6 @@ const hist = createBrowserHistory();
 
 
 function App() {
-    const { token, setToken } = useToken();
-    //const token = getToken();
-    //const [token, setToken] = useState();
 
     const Page404 = ({ location }) => (
         <div>

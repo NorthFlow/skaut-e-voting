@@ -12,7 +12,7 @@ import CardBody from "components/Card/CardBody.js";
 
 import MyModal from "../../components/Modal/MyModal";
 
-import { Modal,ModalManager,Effect} from 'react-dynamic-modal';
+import { ModalManager} from 'react-dynamic-modal';
 
 const styles = {
   cardCategoryWhite: {
@@ -54,37 +54,84 @@ class  TableListClass extends Component {
 
     this.state = {
       classes : makeStyles(styles),
-      DataForTable : [[]]
+      Votings : [[]],
+      QandA : [[]]
     }
   }
   componentDidMount() {
     this.loadDataAfterSuccessLogin();
+
+    
   }
 
   openModal(){
     // const text = this.refs.input.value;
-    ModalManager.open(<MyModal text="Tralala" onRequestClose={() => true}/>);
+    //ModalManager.open(<MyModal text="Tralala" onRequestClose={() => true}/>);
+
+    //console.log("ID V MODAL :   "+id);
+    //urobime loop nad datami
+    //let datas = this.state.Votings;
+    this.loadQuestionAnswerData(2);
+    ModalManager.open(<MyModal params={this.state.QandA} onRequestClose={() => true}/>);
  }
 
   loadDataAfterSuccessLogin = () => {
     //console.log("SPUSTAM NACITAVANIE");
     //LOAD poistovne
-    console.log(localStorage.getItem("token"));
+    //console.log(localStorage.getItem("token"));
     Axios.get('http://localhost:4001/voting/all-votings/' + localStorage.getItem("token"))
     .then(res => {
       let tmpArray = [[]];
       for(var i=0; i< res.data.length; i++){
-        var dataPom = [JSON.stringify(res.data[i].id_voting), res.data[i].name, true];
+        var dataPom = [JSON.stringify(res.data[i].id_voting), res.data[i].name, "true"];
         tmpArray.push(dataPom);
       }
 
       this.setState({
-        DataForTable: tmpArray
+        Votings: tmpArray
     })
 
-    let datas = this.state.DataForTable.filter((e, i) => i !== 0);
-    this.setState({ DataForTable : datas });
+    let datas = this.state.Votings.filter((e, i) => i !== 0);
+    this.setState({ Votings : datas });
 
+    })
+    .catch(err => {
+      if (err.response) {
+        //TODO: show error response from server
+        window.alert(err.response.data.message);
+        
+        console.log(err.response.data.message);
+        this.setState({...this.state,error: err.response.data.message})
+      } else if (err.request) {
+        //TODO: msg internet connection..
+        window.alert("Internet connection failed.");
+      } else {
+          //TODO: rly dont know what error can happend here but can happend :D
+          window.alert("Something went wrong.");
+    }});
+  }
+
+  loadQuestionAnswerData = (voting_id) =>{
+    // ----- nacitanie otazok k votingom.
+    Axios.get('http://localhost:4001/questions/qawording/' + voting_id)
+    .then(res => {
+      //console.log("in then");
+      let tmpArray = [[]];
+      for(var i=0; i< res.data.length; i++){
+        var dataPom = [JSON.stringify(res.data[i].question), JSON.stringify(res.data[i].wording),JSON.stringify(res.data[i].id_answer), JSON.stringify(res.data[i].answer)];
+        //console.log("riadok> "+dataPom);
+        tmpArray.push(dataPom);
+      }
+      console.log(tmpArray)
+      this.setState({
+        QandA: tmpArray
+    })
+
+    //console.log(this.state.QandA)
+
+    let datas = this.state.QandA.filter((e, i) => i !== 0);
+    this.setState({ QandA : datas });
+    
     })
     .catch(err => {
       if (err.response) {
@@ -117,7 +164,7 @@ render(){
             <Table
               tableHeaderColor="primary"
               tableHead={["Číslo", "Krátky popis", ""]}
-              tableData= {this.state.DataForTable}
+              tableData= {this.state.Votings}
               clickButton={this.openModal.bind(this)}
             />
           </CardBody>
