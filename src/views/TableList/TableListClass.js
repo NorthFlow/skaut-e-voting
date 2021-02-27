@@ -11,7 +11,6 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 
 import MyModal from "../../components/Modal/MyModal";
-
 import { ModalManager} from 'react-dynamic-modal';
 
 const styles = {
@@ -44,10 +43,6 @@ const styles = {
   }
 };
 
-//const useStyles = makeStyles(styles);
-
-
-
 class  TableListClass extends Component {
   constructor(props) {
     super(props);
@@ -58,19 +53,12 @@ class  TableListClass extends Component {
       QandA : [[]]
     }
   }
+
   componentDidMount() {
     this.loadDataAfterSuccessLogin();
-
-    
   }
 
   openModal =(voting_id) =>{
-    // const text = this.refs.input.value;
-    //ModalManager.open(<MyModal text="Tralala" onRequestClose={() => true}/>);
-
-    //console.log("ID V MODAL :   "+id);
-    //urobime loop nad datami
-    //let datas = this.state.Votings;
     this.loadQuestionAnswerData(voting_id);
     ModalManager.open(<MyModal params={this.state.QandA} onRequestClose={() => true}/>);
  }

@@ -18,8 +18,6 @@ import Axios from "axios";
 const useStyles = makeStyles(styles);
 
 const openModal = (voting_id) =>{
-  // const text = this.refs.input.value;
-  //ModalManager.open(<MyModal text="Tralala" onRequestClose={() => true}/>);
 
   console.log("ID V MODAL :   " + voting_id);
 
@@ -28,8 +26,6 @@ const openModal = (voting_id) =>{
   Axios.get('http://localhost:4001/questions/q-a-count/' + voting_id)
     .then(res => {
       counts = res.data;
-      //console.log("counts:");
-      //console.log(counts);
     })
     .catch(err => {
       if (err.response) {
@@ -51,23 +47,10 @@ const openModal = (voting_id) =>{
   //let datas = this.state.Votings;
   // ----- nacitanie otazok k votingom.
 
-
-
   Axios.get('http://localhost:4001/questions/qawording/' + voting_id)
     .then(res => {
-      //console.log("in then");
       let datas = [[]];
-      /*
-      for(var i=0; i< res.data.length; i++){
-        var dataPom = [JSON.stringify(res.data[i].question), JSON.stringify(res.data[i].wording),JSON.stringify(res.data[i].id_answer), JSON.stringify(res.data[i].answer)];
-        //console.log("riadok> "+dataPom);
-        tmpArray.push(dataPom);
-      } */
       datas=res.data;
-      console.log("datas:");
-      console.log(datas);
-
-      //let datas = tmpArray.filter((e, i) => i !== 0);
       
       ModalManager.open(<MyModal params={datas} acount={counts} onRequestClose={() => true}/>);
     })

@@ -1,19 +1,13 @@
 import React from 'react'; 
-
 import { createBrowserHistory } from "history";
 import {  Router, Route, Switch } from "react-router-dom";
 
 // core components
 import Admin from "layouts/Admin";
 import LoginClass from "views/LoginPage/LoginClass";
-
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 
-
-
 const hist = createBrowserHistory();
-
-
 
 function App() {
 
@@ -28,8 +22,6 @@ function App() {
         return <LoginClass  />
       }
       
-
-
     return (
         
         <div>
@@ -42,8 +34,6 @@ function App() {
             <Route component={Page404} />
             </Switch> 
         </Router>
-
-        
         </div>
         
     );

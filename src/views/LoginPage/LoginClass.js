@@ -9,10 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import {Redirect,Route } from "react-router-dom";
-
+import {Redirect } from "react-router-dom";
 import logo from 'assets/img/raise-hand-blue.png';
-
 
 function Copyright() {
   return (
@@ -48,8 +46,6 @@ const styles = {
 };
 
 
-
-
 class LoginClass extends Component{
   constructor(props) {
 
@@ -65,8 +61,6 @@ class LoginClass extends Component{
     };
   }
 
-  //const classes = useStyles();
-
   handleFormChange = event => {
     let loginParamsNew = { ...this.state.loginParams };
     let val = event.target.value;
@@ -80,12 +74,8 @@ class LoginClass extends Component{
     this.setState({ error: '' });
     Axios.post('http://localhost:4001/user/login', this.state.loginParams)
       .then(res => {
-        //TODO: success login
-        //window.alert("Prihlásenie prebehlo úspešne.");
-  
         console.log('success login', res.data)
-        //console.log('res.data.user_id: ', res.data.id_user);
-        //console.log(res.data);
+        
         localStorage.setItem("token", res.data.id_user);
         localStorage.setItem("user",  JSON.stringify(res.data));
         console.log(localStorage.getItem("token"));
@@ -116,14 +106,9 @@ class LoginClass extends Component{
     window.location.reload();
   }
 
-
   render() {  
     if ( localStorage.getItem("token") ) {
-      //console.log('TOKEN MAME!!!');
-      //console.log(localStorage.getItem("token"));
-      
       return <Redirect to="/" />
-     
     }
 
     return (
@@ -180,8 +165,6 @@ class LoginClass extends Component{
         </Box>
       </Container>
     );}
-
-
 
 }
 
