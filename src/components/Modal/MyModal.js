@@ -46,7 +46,6 @@ class MyModal extends Component{
       const { params,counts, onRequestClose } = this.props;
       //console.log("params: "+params)
       let index_pom=99;
-      let vypis_pom=null;
       return (
          <Modal
             onRequestClose={onRequestClose}
@@ -70,7 +69,7 @@ class MyModal extends Component{
                      return (
                         <Aux key={index} > 
                            <h3 className='h3-custom'>{ item.wording } </h3>
-                           <SquareButton  >{item.answer } </SquareButton>
+                           <SquareButton id_q={item.question} id_a={item.id_answer}  >{item.answer } </SquareButton>
                         </Aux>
                       )
                   }

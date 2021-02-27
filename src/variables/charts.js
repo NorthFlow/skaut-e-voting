@@ -125,8 +125,8 @@ const emailsSubscriptionChart = {
 
 const completedTasksChart = {
   data: {
-    labels: ["20", "21", "22", "23", "24"],
-    series: [[12,5,5,2,2],[5,5,10,5,4]]
+    labels: ["20", "21", "22", "23", "24","25","26","27"],
+    series: [[12,5,5,2,2,2,2,3],[5,5,10,5,4,1,1,0]]
   },
   options: {
     lineSmooth: Chartist.Interpolation.cardinal({
