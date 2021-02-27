@@ -20,6 +20,8 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
+import { Link } from 'react-router-dom'
+
 import {
   dailySalesChart,
   emailsSubscriptionChart,
@@ -78,12 +80,12 @@ export default function Dashboard() {
                 <Icon>info_outline</Icon>
               </CardIcon>
               <p className={classes.cardCategory}>Podklady</p>
-              <h3 className={classes.cardTitle}>75</h3>
+              <h3 className={classes.cardTitle}>7</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
                 <LocalOffer />
-                Link na úložisko súborov
+                <a href="https://drive.google.com/drive/folders/1zIuQg6NiGqQQiYG2vRZwdddEvreVl5ak?usp=sharing" target="_blank">Link na úložisko súborov</a>
               </div>
             </CardFooter>
           </Card>

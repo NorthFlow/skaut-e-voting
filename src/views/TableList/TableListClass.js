@@ -142,7 +142,7 @@ render(){
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Card >
-          <CardHeader color="primary">
+          <CardHeader style={{background: "#019ECE", color: "white"}}>
             <h4 className={this.state.classes.cardTitleWhite}>Hlasovanie malý snem 2021</h4>
             <p className={this.state.classes.cardCategoryWhite}>
               V tejto tabuľké nájdete konkrétne hlasovania nastavené pre Malý snem SLSK 2021.

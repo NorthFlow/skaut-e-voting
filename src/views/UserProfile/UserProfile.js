@@ -41,9 +41,7 @@ export default function UserProfile() {
         <GridItem xs={12} sm={12} md={12}>
           <Card profile>
             <CardAvatar profile>
-              <a href="#pablo" onClick={e => e.preventDefault()}>
-                <img src={avatar} alt="..." />
-              </a>
+              <img src={avatar} alt="..." />
             </CardAvatar>
             <CardBody profile>
               <h6 className={classes.cardCategory}>Prihlásený/á ako:</h6>
