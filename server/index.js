@@ -1,6 +1,6 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const pino = require('express-pino-logger')();
+//const bodyParser = require('body-parser');
+//const pino = require('express-pino-logger')();
 
 var mysql = require('mysql');
 const apiRouterLogin = require('./routes/user');
@@ -15,13 +15,13 @@ const app = express();
 
 //Simple Usage (Enable All CORS Requests)
 app.use(cors())
-
+/*
 app.use('/login', (req, res) => {
   res.send({
     token: 'test123'
   });
 });
-
+ */
 
 app.use(express.json());
 

@@ -27,17 +27,9 @@ const openModal = (voting_id) =>{
   let counts=[[]];
   Axios.get('http://localhost:4001/questions/q-a-count/' + voting_id)
     .then(res => {
-      //console.log("in then");
-      let tmpArray = [[]];
-      for(var i=0; i< res.data.length; i++){
-        var dataPom = [JSON.stringify(res.data[i].id_question), JSON.stringify(res.data[i].acount)];
-        //console.log("riadok> "+dataPom);
-        tmpArray.push(dataPom);
-      }
-      //console.log(tmpArray)
-
-      counts = tmpArray.filter((e, i) => i !== 0);
-      console.log(counts);
+      counts = res.data;
+      //console.log("counts:");
+      //console.log(counts);
     })
     .catch(err => {
       if (err.response) {
@@ -64,15 +56,18 @@ const openModal = (voting_id) =>{
   Axios.get('http://localhost:4001/questions/qawording/' + voting_id)
     .then(res => {
       //console.log("in then");
-      let tmpArray = [[]];
+      let datas = [[]];
+      /*
       for(var i=0; i< res.data.length; i++){
         var dataPom = [JSON.stringify(res.data[i].question), JSON.stringify(res.data[i].wording),JSON.stringify(res.data[i].id_answer), JSON.stringify(res.data[i].answer)];
         //console.log("riadok> "+dataPom);
         tmpArray.push(dataPom);
-      }
-      console.log(tmpArray)
+      } */
+      datas=res.data;
+      console.log("datas:");
+      console.log(datas);
 
-      let datas = tmpArray.filter((e, i) => i !== 0);
+      //let datas = tmpArray.filter((e, i) => i !== 0);
       
       ModalManager.open(<MyModal params={datas} acount={counts} onRequestClose={() => true}/>);
     })

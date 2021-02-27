@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import { Redirect } from "react-router-dom";
+import {Redirect,Route } from "react-router-dom";
 
 import logo from 'assets/img/raise-hand-blue.png';
 
@@ -113,6 +113,7 @@ class LoginClass extends Component{
       ...this.state,
       islogged: true
     });
+    window.location.reload();
   }
 
 
@@ -121,9 +122,8 @@ class LoginClass extends Component{
       //console.log('TOKEN MAME!!!');
       //console.log(localStorage.getItem("token"));
       
-      
-      return <Redirect to="/admin" />;
-      
+      return <Redirect to="/" />
+     
     }
 
     return (
