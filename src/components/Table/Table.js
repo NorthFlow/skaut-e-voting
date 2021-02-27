@@ -11,7 +11,88 @@ import Button from "@material-ui/core/Button";
 // core components
 import styles from "assets/jss/material-dashboard-react/components/tableStyle.js";
 
+import MyModal from "../Modal/MyModal";
+import { ModalManager} from 'react-dynamic-modal';
+import Axios from "axios";
+
 const useStyles = makeStyles(styles);
+
+const openModal = (voting_id) =>{
+  // const text = this.refs.input.value;
+  //ModalManager.open(<MyModal text="Tralala" onRequestClose={() => true}/>);
+
+  console.log("ID V MODAL :   " + voting_id);
+
+  //q-a-count
+  let counts=[[]];
+  Axios.get('http://localhost:4001/questions/q-a-count/' + voting_id)
+    .then(res => {
+      //console.log("in then");
+      let tmpArray = [[]];
+      for(var i=0; i< res.data.length; i++){
+        var dataPom = [JSON.stringify(res.data[i].id_question), JSON.stringify(res.data[i].acount)];
+        //console.log("riadok> "+dataPom);
+        tmpArray.push(dataPom);
+      }
+      //console.log(tmpArray)
+
+      counts = tmpArray.filter((e, i) => i !== 0);
+      console.log(counts);
+    })
+    .catch(err => {
+      if (err.response) {
+        //TODO: show error response from server
+        window.alert(err.response.data.message);
+        
+        console.log(err.response.data.message);
+        this.setState({...this.state,error: err.response.data.message})
+      } else if (err.request) {
+        //TODO: msg internet connection..
+        window.alert("Internet connection failed.");
+      } else {
+          //TODO: rly dont know what error can happend here but can happend :D
+          window.alert("Something went wrong.");
+    }});
+
+
+  //urobime loop nad datami
+  //let datas = this.state.Votings;
+  // ----- nacitanie otazok k votingom.
+
+
+
+  Axios.get('http://localhost:4001/questions/qawording/' + voting_id)
+    .then(res => {
+      //console.log("in then");
+      let tmpArray = [[]];
+      for(var i=0; i< res.data.length; i++){
+        var dataPom = [JSON.stringify(res.data[i].question), JSON.stringify(res.data[i].wording),JSON.stringify(res.data[i].id_answer), JSON.stringify(res.data[i].answer)];
+        //console.log("riadok> "+dataPom);
+        tmpArray.push(dataPom);
+      }
+      console.log(tmpArray)
+
+      let datas = tmpArray.filter((e, i) => i !== 0);
+      
+      ModalManager.open(<MyModal params={datas} acount={counts} onRequestClose={() => true}/>);
+    })
+    .catch(err => {
+      if (err.response) {
+        //TODO: show error response from server
+        window.alert(err.response.data.message);
+        
+        console.log(err.response.data.message);
+        this.setState({...this.state,error: err.response.data.message})
+      } else if (err.request) {
+        //TODO: msg internet connection..
+        window.alert("Internet connection failed.");
+      } else {
+          //TODO: rly dont know what error can happend here but can happend :D
+          window.alert("Something went wrong.");
+    }});
+
+  
+}
 
 export default function CustomTable(props) {
   const classes = useStyles();
@@ -36,16 +117,16 @@ export default function CustomTable(props) {
           </TableHead>
         ) : null}
         <TableBody>
-          {tableData.map((prop, key) => {
+          {tableData.map((propup, key) => {
             return (
               <TableRow key={key} className={classes.tableBodyRow}>
-                {prop.map((prop, key) => {
+                {propup.map((prop, key) => {
 
                   if ( prop === "true") {
                     
                     return (
                       <TableCell className={classes.tableCell} key={key}>
-                        <Button onClick={clickButton}>Zahlasuj</Button>
+                        <Button onClick={openModal.bind(this, propup[0])}>Zahlasuj</Button>
                       </TableCell>
                     );
                     

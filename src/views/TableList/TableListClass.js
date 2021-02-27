@@ -64,14 +64,14 @@ class  TableListClass extends Component {
     
   }
 
-  openModal(){
+  openModal =(voting_id) =>{
     // const text = this.refs.input.value;
     //ModalManager.open(<MyModal text="Tralala" onRequestClose={() => true}/>);
 
     //console.log("ID V MODAL :   "+id);
     //urobime loop nad datami
     //let datas = this.state.Votings;
-    this.loadQuestionAnswerData(2);
+    this.loadQuestionAnswerData(voting_id);
     ModalManager.open(<MyModal params={this.state.QandA} onRequestClose={() => true}/>);
  }
 
@@ -165,7 +165,6 @@ render(){
               tableHeaderColor="primary"
               tableHead={["Číslo", "Krátky popis", ""]}
               tableData= {this.state.Votings}
-              clickButton={this.openModal.bind(this)}
             />
           </CardBody>
         </Card>

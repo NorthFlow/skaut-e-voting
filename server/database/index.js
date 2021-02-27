@@ -182,7 +182,7 @@ userdb.getQuestionsCountInVoting = (voting_id) => {
 // --- vrati pocet odpovedi na otazky daneho votingu podľa jeho ID
 userdb.getAnswerCountPerQuestion = (voting_id) => {
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT id_question, COUNT(id_answer) FROM answers WHERE id_voting=? 
+        connection.query(`SELECT id_question, COUNT(id_answer) AS acount FROM answers WHERE id_voting=? 
         GROUP BY (id_question) `,[voting_id], (err, result) => {
             if (err) {
                 return reject(err);
@@ -196,7 +196,8 @@ userdb.getQaAInVoting = (voting_id) => {
     //console.log(voting_id+" in select time");
     return new Promise((resolve, reject) => {
         connection.query(`SELECT questions.id_question as question, wording, id_answer, answer 
-        FROM answers JOIN questions ON (questions.id_question) WHERE answers.id_voting=? ORDER BY question`,[voting_id], (err, result) => {
+        FROM answers JOIN questions ON (questions.id_question=answers.id_question) WHERE answers.id_voting=?
+        ORDER BY question ASC`,[voting_id], (err, result) => {
             if (err) {
                 return reject(err);
             }

@@ -26,4 +26,7 @@ router.get('/all-votings/:id', async (req,res,next) => {
 
 });
 
+
+
 module.exports = router;
+
