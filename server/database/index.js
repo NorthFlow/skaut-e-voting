@@ -69,6 +69,7 @@ userdb.getAllQuestions = () => {
         });
     })
 }
+
 // --- return list of
 userdb.getAllUserVotings = (user_id) => {
     return new Promise((resolve, reject) => {
@@ -76,7 +77,7 @@ userdb.getAllUserVotings = (user_id) => {
             CASE secret WHEN 0 THEN 'Nie' WHEN 1 THEN 'Áno' END , 
             (SELECT CASE COUNT(*) WHEN 0 THEN "Ešte nehlasované" ELSE "Už zahlasované" END 
                 FROM user_voting  WHERE id_user= ? AND user_voting.id_voting=voting.id_voting) 
-            FROM voting  WHERE EXISTS (SELECT * FROM user_voting_relation  where user_voting_relation.can_vote=1 
+            FROM voting WHERE EXISTS (SELECT * FROM user_voting_relation  where user_voting_relation.can_vote=1 
             AND user_voting_relation.id_user= ? AND voting.id_voting=user_voting_relation.id_voting) 
             ORDER BY id_voting ASC`,[user_id, user_id], (err, results) => {
             if (err) {
@@ -86,22 +87,12 @@ userdb.getAllUserVotings = (user_id) => {
         });
     })
 }
-// --- check - can vote? 0->False
-userdb.checkVotingOpened = (voting_id) => {
-    return new Promise((resolve, reject) => {
-        connection.query(`SELECT accept_answ FROM voting WHERE id_voting = ? `,[voting_id], (err, result) => {
-            if (err) {
-                return reject(err);
-            }
-            return resolve(result);
-        });
-    })
-}
-// --- check - voted yet? 0->False
-userdb.checkVoted = (voting_id,user_id) => {
+
+// --- OK voted yet? ak používateľ ešte nehlasoval vráti nulu
+userdb.checkVoted = (question_id,user_id) => {
     return new Promise((resolve, reject) => {
         connection.query(`SELECT COUNT(*) FROM user_voting 
-        WHERE id_voting = ? AND id_user = ?`,[voting_id,user_id], (err, result) => {
+        WHERE id_question = ? AND id_user = ?`,[question_id,user_id], (err, result) => {
             if (err) {
                 return reject(err);
             }
@@ -109,7 +100,8 @@ userdb.checkVoted = (voting_id,user_id) => {
         });
     })
 }
-// --- check - voted yet? 0->False
+
+// --- kontrola či môže používateľ hlasovať
 userdb.checkCanVote = (voting_id,user_id) => {
     return new Promise((resolve, reject) => {
         connection.query(`SELECT can_vote FROM user_voting_relation 
@@ -121,11 +113,12 @@ userdb.checkCanVote = (voting_id,user_id) => {
         });
     })
 }
-// --- create blank voting, by default closed
-userdb.createVoting = (voting_name,is_secret) => {
+
+// --- create blank voting
+userdb.createVoting = (voting_name) => {
     return new Promise((resolve, reject) => {
-        connection.query(`INSERT INTO voting (name,accept_answ,secret) 
-        VALUES ("?",0,?)`,[voting_name,is_secret], (err, result) => {
+        connection.query(`INSERT INTO voting (name) 
+        VALUES (?)`,[voting_name], (err, result) => {
             if (err) {
                 return reject(err);
             }
@@ -133,6 +126,7 @@ userdb.createVoting = (voting_name,is_secret) => {
         });
     })
 }
+
 // --- return voting ID by its name,
 userdb.getVotingID = (voting_name) => {
     return new Promise((resolve, reject) => {
@@ -144,30 +138,7 @@ userdb.getVotingID = (voting_name) => {
         });
     })
 }
-// --- update voting, universal update to all columns
-// UPDATE voting SET name='Test', accept_answ=(SELECT accept_answ FROM voting WHERE id_voting=6), secret=0 where id_voting=6
-userdb.setVoting = (voting_id,voting_name,accept_answ,secret) => {
-    return new Promise((resolve, reject) => {
-        connection.query(`UPDATE voting SET name='?', accept_answ=?,secret=? 
-        WHERE id_voting=?`,[voting_name,accept_answ,secret,voting_id], (err, result) => {
-            if (err) {
-                return reject(err);
-            }
-            return resolve(result);
-        });
-    })
-}
-// --- delete specific voting, you must firstly delete questions, answers and other references
-userdb.delVoting = (voting_id) => {
-    return new Promise((resolve, reject) => {
-        connection.query(`DELETE FROM voting WHERE id_voting=?`,[voting_id], (err, result) => {
-            if (err) {
-                return reject(err);
-            }
-            return resolve(result);
-        });
-    })
-}
+
 // --- vrati pocet otazok daneho votingu podľa jeho ID
 userdb.getQuestionsCountInVoting = (voting_id) => {
     return new Promise((resolve, reject) => {
@@ -179,6 +150,7 @@ userdb.getQuestionsCountInVoting = (voting_id) => {
         });
     })
 }
+
 // --- vrati pocet odpovedi na otazky daneho votingu podľa jeho ID
 userdb.getAnswerCountPerQuestion = (voting_id) => {
     return new Promise((resolve, reject) => {
@@ -191,7 +163,8 @@ userdb.getAnswerCountPerQuestion = (voting_id) => {
         });
     })
 }
-// --- vrati znenie otázok a odpovedí daneho votingu podľa jeho ID
+
+// --- vrati znenie otázok a odpovedí daneho votingu podľa jeho IDg
 userdb.getQaAInVoting = (voting_id) => {
     //console.log(voting_id+" in select time");
     return new Promise((resolve, reject) => {
@@ -205,11 +178,12 @@ userdb.getQaAInVoting = (voting_id) => {
         });
     })
 }
-// --- poznačenie že používateľ hlasoval v danom votingu
-userdb.setMarkVoted = (voting_id,user_id) => {
+
+// --- OK poznačenie že používateľ hlasoval v danej otázke
+userdb.setMarkVoted = (question_id,user_id) => {
     return new Promise((resolve, reject) => {
-        connection.query(`INSERT INTO user_voting(id_user,id_voting) 
-        VALUES (?,?)`,[user_id,voting_id], (err, result) => {
+        connection.query(`INSERT INTO user_voting(id_user,id_question) 
+        VALUES (?,?)`,[user_id,question_id], (err, result) => {
             if (err) {
                 return reject(err);
             }
@@ -217,7 +191,8 @@ userdb.setMarkVoted = (voting_id,user_id) => {
         });
     })
 }
-// --- zápis odpovedí z hlasovania, !!! ak je hlasovanie tajné, musíme poslať null!!!
+
+// --- OK zápis odpovedí z hlasovania, !!! ak je hlasovanie tajné, musíme poslať null!!!
 userdb.setVote = (answer_id,question_id,voting_id,user_id) => {
     return new Promise((resolve, reject) => {
         connection.query(`INSERT INTO votes(id_answer, id_question, id_voting, id_user) 
@@ -229,12 +204,13 @@ userdb.setVote = (answer_id,question_id,voting_id,user_id) => {
         });
     })
 }
-// --- výpis štatistiky hlasovania za voting
-userdb.getVotingStats = (voting_id) => {
+
+// --- OK výpis štatistiky hlasovania za otázku
+userdb.getQuestionStats = (question_id) => {
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT votes.id_question,wording,votes.id_answer,answer, COUNT(*) 
-        FROM votes JOIN questions USING (id_question) JOIN answers USING(id_answer) 
-        WHERE votes.id_voting=? GROUP BY id_answer`,[voting_id], (err, result) => {
+        connection.query(`SELECT votes.id_question,wording,votes.id_answer,answer, 
+        COUNT(*) FROM votes JOIN questions USING (id_question) JOIN answers USING(id_answer) 
+        WHERE votes.id_question=? GROUP BY id_answer`,[question_id], (err, result) => {
             if (err) {
                 return reject(err);
             }
@@ -242,4 +218,74 @@ userdb.getVotingStats = (voting_id) => {
         });
     })
 }
+
+// --- OK vráti odpovede na otázku podľa jej ID
+userdb.getAnswersByQID = (question_id) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`SELECT id_answer,answer FROM answers WHERE id_question=? `,[question_id], (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(result);
+        });
+    })
+}
+
+// --- OK vráti názov a znenie otázky na základe jej ID
+userdb.getQuestion = (question_id) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`SELECT name,wording FROM questions 
+        WHERE id_question=?`,[question_id], (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(result);
+        });
+    })
+}
+
+// --- OK vráti či je hlasovanie v otázke spustené a či je tajné
+userdb.getQuestionParams = (question_id) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`SELECT accept_answ,secret FROM questions 
+        WHERE id_question=?`,[question_id], (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(result);
+        });
+    })
+}
+
+// ---OK vráti zoznam votingov dostupných pre používateľa v daným ID
+userdb.getAvailableVoting = (user_id) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`SELECT id_voting,name FROM voting 
+        WHERE id_voting IN (SELECT id_voting FROM user_voting_relation 
+        WHERE id_user=? AND can_vote=1) ) `,[user_id], (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(result);
+        });
+    })
+}
+
+// --- OK vráti zoznam otázok pre konkrétny voting
+userdb.getVotingQuestions = (voting_id,user_id) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`SELECT id_question ,name , CASE accept_answ 
+        WHEN 0 THEN 'Nie' WHEN 1 THEN 'Áno' END , CASE secret WHEN 0 THEN 'Nie' 
+        WHEN 1 THEN 'Áno' END , (SELECT CASE COUNT(*) WHEN 0 THEN "Ešte nehlasované" 
+        ELSE "Už zahlasované" END FROM user_voting WHERE id_user= ? 
+        AND user_voting.id_question=questions.id_question) FROM questions 
+        WHERE id_voting= ? ORDER BY id_question ASC `,[user_id, voting_id], (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(result);
+        });
+    })
+}
+
 module.exports = userdb;
