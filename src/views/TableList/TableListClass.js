@@ -10,8 +10,10 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 
+
 import MyModal from "../../components/Modal/MyModal";
 import { ModalManager} from 'react-dynamic-modal';
+import  Combobox  from 'react-responsive-combo-box';
 
 const styles = {
   cardCategoryWhite: {
@@ -50,7 +52,12 @@ class  TableListClass extends Component {
     this.state = {
       classes : makeStyles(styles),
       Votings : [[]],
-      QandA : [[]]
+      Questions: [[]],
+      QandA : [[]],
+      TableParams:{
+        voting_id:'',
+        user_id:''
+      }
     }
   }
 
@@ -59,28 +66,57 @@ class  TableListClass extends Component {
   }
 
   openModal =(voting_id) =>{
-    this.loadQuestionAnswerData(voting_id);
-    ModalManager.open(<MyModal params={this.state.QandA} onRequestClose={() => true}/>);
+    //this.loadQuestionAnswerData(voting_id);
+    //ModalManager.open(<MyModal params={this.state.QandA} onRequestClose={() => true}/>);
  }
 
   loadDataAfterSuccessLogin = () => {
-    //console.log("SPUSTAM NACITAVANIE");
-    //LOAD poistovne
-    //console.log(localStorage.getItem("token"));
-    Axios.get('http://localhost:4001/voting/all-votings/' + localStorage.getItem("token"))
+    //Ako krok cislo jedna si nacitame dostupne votingy pre prihlaseneho uzivatela
+    Axios.get('http://localhost:4001/voting/available-votings/' + localStorage.getItem("token"))
     .then(res => {
-      let tmpArray = [[]];
-      for(var i=0; i< res.data.length; i++){
-        var dataPom = [JSON.stringify(res.data[i].id_voting), res.data[i].name, "true"];
-        tmpArray.push(dataPom);
-      }
-
       this.setState({
-        Votings: tmpArray
+        Votings: res.data
     })
+    this.loadInitQuestionsData(this.state.Votings[0].id_voting,parseInt(localStorage.getItem("token"),10));
 
-    let datas = this.state.Votings.filter((e, i) => i !== 0);
-    this.setState({ Votings : datas });
+    })
+    .catch(err => {
+      if (err.response) {
+        //TODO: show error response from server
+        window.alert(err.response.data.message);
+        
+        console.log(err.response.data.message);
+        this.setState({...this.state,error: err.response.data.message})
+      } else if (err.request) {
+        //TODO: msg internet connection..
+        window.alert("Internet connection failed.");
+      } else {
+          //TODO: rly dont know what error can happend here but can happend :D
+          window.alert("Something went wrong.");
+    }});
+
+  }
+
+  loadInitQuestionsData =(id_voting,id_user) =>{
+    let TableParamsNew = { 
+      voting_id:id_voting,
+      user_id:id_user
+     };
+
+    this.setState({
+      TableParams: TableParamsNew
+    });
+    console.log("----------- tableparams");
+    console.log(this.state.TableParams);
+
+    //Ako krok cislo dva si nacitame otazky votingu na pozicii 0
+    Axios.post('http://localhost:4001/questions/get-voting-questions' , this.state.TableParams)
+    .then(res => {
+      this.setState({
+        Questions: res.data,
+    })
+    console.log("----- QUESTIONS");
+    console.log(res.data);
 
     })
     .catch(err => {
@@ -98,6 +134,11 @@ class  TableListClass extends Component {
           window.alert("Something went wrong.");
     }});
   }
+
+  handleFormChange = event => {
+
+    
+};
 
   loadQuestionAnswerData = (voting_id) =>{
     // ----- nacitanie otazok k votingom.
@@ -142,6 +183,14 @@ render(){
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Card >
+
+        
+        <select value={this.state.Votings} className="form-control"  id="selectMenu" onChange={this.handleFormChange} >
+          {this.state.Votings.map((item)=>{
+                  return <option key={item.id_voting} value={item.id_voting}>{item.name}</option>
+              }) }
+          </select>
+
           <CardHeader style={{background: "#019ECE", color: "white"}}>
             <h4 className={this.state.classes.cardTitleWhite}>Hlasovanie malý snem 2021</h4>
             <p className={this.state.classes.cardCategoryWhite}>
@@ -149,10 +198,10 @@ render(){
             </p>
           </CardHeader>
           <CardBody>
-            <Table
+          <Table
               tableHeaderColor="primary"
-              tableHead={["Číslo", "Krátky popis", ""]}
-              tableData= {this.state.Votings}
+              tableHead={["Krátky popis", ""]}
+              tableData= {this.state.Questions}
             />
           </CardBody>
         </Card>

@@ -179,6 +179,21 @@ userdb.getQaAInVoting = (voting_id) => {
     })
 }
 
+// --- vrati znenie otázok a odpovedí daneho votingu podľa jeho IDg
+userdb.getQInVoting = (voting_id) => {
+    //console.log(voting_id+" in select time");
+    return new Promise((resolve, reject) => {
+        connection.query(`SELECT questions.id_question as question, name, wording,
+        FROM  questions WHERE id_voting=?
+        ORDER BY question ASC`,[voting_id], (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(result);
+        });
+    })
+}
+
 // --- OK poznačenie že používateľ hlasoval v danej otázke
 userdb.setMarkVoted = (question_id,user_id) => {
     return new Promise((resolve, reject) => {
@@ -208,8 +223,8 @@ userdb.setVote = (answer_id,question_id,voting_id,user_id) => {
 // --- OK výpis štatistiky hlasovania za otázku
 userdb.getQuestionStats = (question_id) => {
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT votes.id_question,wording,votes.id_answer,answer, 
-        COUNT(*) FROM votes JOIN questions USING (id_question) JOIN answers USING(id_answer) 
+        connection.query(`SELECT votes.id_question as question,wording,votes.id_answer as answer_id,answer, 
+        COUNT(*) as count FROM votes JOIN questions USING (id_question) JOIN answers USING(id_answer) 
         WHERE votes.id_question=? GROUP BY id_answer`,[question_id], (err, result) => {
             if (err) {
                 return reject(err);
@@ -260,9 +275,9 @@ userdb.getQuestionParams = (question_id) => {
 // ---OK vráti zoznam votingov dostupných pre používateľa v daným ID
 userdb.getAvailableVoting = (user_id) => {
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT id_voting,name FROM voting 
-        WHERE id_voting IN (SELECT id_voting FROM user_voting_relation 
-        WHERE id_user=? AND can_vote=1) ) `,[user_id], (err, result) => {
+        connection.query(`SELECT voting.id_voting as id_voting,voting.name as name FROM voting 
+        WHERE id_voting IN (SELECT user_voting_relation.id_voting FROM user_voting_relation 
+        WHERE user_voting_relation.id_user=? AND user_voting_relation.can_vote=1)`,[user_id], (err, result) => {
             if (err) {
                 return reject(err);
             }
@@ -273,12 +288,13 @@ userdb.getAvailableVoting = (user_id) => {
 
 // --- OK vráti zoznam otázok pre konkrétny voting
 userdb.getVotingQuestions = (voting_id,user_id) => {
+    console.log("---------- voting: "+voting_id+" user:"+user_id);
     return new Promise((resolve, reject) => {
         connection.query(`SELECT id_question ,name , CASE accept_answ 
-        WHEN 0 THEN 'Nie' WHEN 1 THEN 'Áno' END , CASE secret WHEN 0 THEN 'Nie' 
-        WHEN 1 THEN 'Áno' END , (SELECT CASE COUNT(*) WHEN 0 THEN "Ešte nehlasované" 
-        ELSE "Už zahlasované" END FROM user_voting WHERE id_user= ? 
-        AND user_voting.id_question=questions.id_question) FROM questions 
+        WHEN 0 THEN 'Nie' WHEN 1 THEN 'Áno' END AS otvorene , CASE secret WHEN 0 THEN 'Nie' 
+        WHEN 1 THEN 'Áno' END AS secret, (SELECT CASE COUNT(*) WHEN 0 THEN "Ešte nehlasované" 
+        ELSE "Už zahlasované" END  FROM user_voting WHERE id_user= ? 
+        AND user_voting.id_question=questions.id_question) AS hlasovane FROM questions 
         WHERE id_voting= ? ORDER BY id_question ASC `,[user_id, voting_id], (err, result) => {
             if (err) {
                 return reject(err);

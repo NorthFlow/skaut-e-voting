@@ -22,6 +22,7 @@ const openModal = (voting_id) =>{
   console.log("ID V MODAL :   " + voting_id);
 
   //q-a-count
+  /*
   let counts=[[]];
   Axios.get('http://localhost:4001/questions/q-a-count/' + voting_id)
     .then(res => {
@@ -40,13 +41,13 @@ const openModal = (voting_id) =>{
       } else {
           //TODO: rly dont know what error can happend here but can happend :D
           window.alert("Something went wrong.");
-    }});
+    }});*/
 
 
   //urobime loop nad datami
   //let datas = this.state.Votings;
   // ----- nacitanie otazok k votingom.
-
+/*
   Axios.get('http://localhost:4001/questions/qawording/' + voting_id)
     .then(res => {
       let datas = [[]];
@@ -67,14 +68,14 @@ const openModal = (voting_id) =>{
       } else {
           //TODO: rly dont know what error can happend here but can happend :D
           window.alert("Something went wrong.");
-    }});
+    }});*/
 
   
 }
 
 export default function CustomTable(props) {
   const classes = useStyles();
-  const { tableHead, tableData, tableHeaderColor, clickButton } = props;
+  const { tableHead, tableData, tableHeaderColor } = props;
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
@@ -98,25 +99,15 @@ export default function CustomTable(props) {
           {tableData.map((propup, key) => {
             return (
               <TableRow key={key} className={classes.tableBodyRow}>
-                {propup.map((prop, key) => {
+                  
+                    <TableCell className={classes.tableCell} >
+                      {propup.name}
+                    </TableCell>
+                  
 
-                  if ( prop === "true") {
-                    
-                    return (
-                      <TableCell className={classes.tableCell} key={key}>
-                        <Button onClick={openModal.bind(this, propup[0])}>Zahlasuj</Button>
-                      </TableCell>
-                    );
-                    
-                  }else {
-                    return (
-                      <TableCell className={classes.tableCell} key={key}>
-                        {prop}
-                      </TableCell>
-                    );
-                  }
-
-                })}
+                <TableCell className={classes.tableCell} >
+                <Button onClick={openModal.bind(this, propup.id_question)}>DETAIL</Button>
+                </TableCell>
               </TableRow>
             );
           })}
