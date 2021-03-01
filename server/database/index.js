@@ -288,7 +288,6 @@ userdb.getAvailableVoting = (user_id) => {
 
 // --- OK vráti zoznam otázok pre konkrétny voting
 userdb.getVotingQuestions = (voting_id,user_id) => {
-    console.log("---------- voting: "+voting_id+" user:"+user_id);
     return new Promise((resolve, reject) => {
         connection.query(`SELECT id_question ,name , CASE accept_answ 
         WHEN 0 THEN 'Nie' WHEN 1 THEN 'Áno' END AS otvorene , CASE secret WHEN 0 THEN 'Nie' 

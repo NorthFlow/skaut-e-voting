@@ -12,8 +12,11 @@ import CardBody from "components/Card/CardBody.js";
 
 
 import MyModal from "../../components/Modal/MyModal";
+import MyModalSimple from "../../components/Modal/MyModalSImple";
 import { ModalManager} from 'react-dynamic-modal';
 import  Combobox  from 'react-responsive-combo-box';
+import { Modal,Effect} from 'react-dynamic-modal';
+import SquareButton from '../../components/CustomButtons/SquareButton';
 
 const styles = {
   cardCategoryWhite: {
@@ -54,15 +57,39 @@ class  TableListClass extends Component {
       Votings : [[]],
       Questions: [[]],
       QandA : [[]],
+      value: 'select',
       TableParams:{
         voting_id:'',
         user_id:''
-      }
-    }
+      },
+      SelectedVoting: '999999'
+    };
+
+    //this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
     this.loadDataAfterSuccessLogin();
+  }
+
+  componentDidUpdate(){
+    if(this.state.SelectedVoting === '999999'){
+      console.log("im in if")
+      console.log("state selected voting: "+this.state.SelectedVoting);
+      ModalManager.open(
+        //<MyModalSimple params={this.state.Votings} handleClicked={this.handleChange} onRequestClose={() => false}/>
+        <Modal
+              onRequestClose={() => true}
+              effect={Effect.SlideFromBottom}
+              >
+                 
+                 { this.state.Votings.map((item,index)=>{
+                    return <SquareButton key={index} clicked={() => this.handleClick(item.id_voting)}>{item.name} </SquareButton>
+                 }) }
+                 
+           </Modal>
+        );
+    }
   }
 
   openModal =(voting_id) =>{
@@ -77,7 +104,7 @@ class  TableListClass extends Component {
       this.setState({
         Votings: res.data
     })
-    this.loadInitQuestionsData(this.state.Votings[0].id_voting,parseInt(localStorage.getItem("token"),10));
+    //this.loadInitQuestionsData(this.state.Votings[0].id_voting,parseInt(localStorage.getItem("token"),10));
 
     })
     .catch(err => {
@@ -98,25 +125,38 @@ class  TableListClass extends Component {
   }
 
   loadInitQuestionsData =(id_voting,id_user) =>{
+
+    //console.log("---------- id voting "+ id_voting);
+    //console.log("---------- id user "+ id_user);
     let TableParamsNew = { 
       voting_id:id_voting,
       user_id:id_user
      };
+     //console.log("----------- NEW tableparams");
+     //console.log(TableParamsNew);
 
     this.setState({
-      TableParams: TableParamsNew
+      TableParams: TableParamsNew,
     });
-    console.log("----------- tableparams");
-    console.log(this.state.TableParams);
+
+    //console.log("----------- tableparams");
+    //console.log(this.state.TableParams);
 
     //Ako krok cislo dva si nacitame otazky votingu na pozicii 0
-    Axios.post('http://localhost:4001/questions/get-voting-questions' , this.state.TableParams)
+    Axios.post('http://localhost:4001/questions/get-voting-questions' , TableParamsNew)
     .then(res => {
       this.setState({
         Questions: res.data,
     })
-    console.log("----- QUESTIONS");
-    console.log(res.data);
+    //console.log("----- QUESTIONS");
+    //console.log(res.data);
+
+    this.setState({
+      SelectedVoting: id_voting,
+    });
+    console.log("menime selectedvoting na :"+this.state.SelectedVoting);
+    this.forceUpdate();
+
 
     })
     .catch(err => {
@@ -135,9 +175,14 @@ class  TableListClass extends Component {
     }});
   }
 
-  handleFormChange = event => {
-
+  handleClick =(id_voting) =>{
+    console.log("---------- handleCHange "+ id_voting);
+    console.log("---------- id voting "+ id_voting);
+    console.log("---------- id user "+ parseInt(localStorage.getItem("token"),10));
+    this.loadInitQuestionsData(id_voting,parseInt(localStorage.getItem("token"),10));
     
+
+    //this.setState({value: event.target.value});
 };
 
   loadQuestionAnswerData = (voting_id) =>{
@@ -185,11 +230,7 @@ render(){
         <Card >
 
         
-        <select value={this.state.Votings} className="form-control"  id="selectMenu" onChange={this.handleFormChange} >
-          {this.state.Votings.map((item)=>{
-                  return <option key={item.id_voting} value={item.id_voting}>{item.name}</option>
-              }) }
-          </select>
+        
 
           <CardHeader style={{background: "#019ECE", color: "white"}}>
             <h4 className={this.state.classes.cardTitleWhite}>Hlasovanie malý snem 2021</h4>

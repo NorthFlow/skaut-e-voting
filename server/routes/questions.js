@@ -71,7 +71,6 @@ router.get('/getQuestionParams/:id', async (req,res,next) => {
 });
 
 router.post('/get-voting-questions', async (req,res,next) => {
-    console.log("---------- voting: "+req.body.voting_id+" user:"+req.body.user_id);
     try {
         let results = await db.getVotingQuestions(req.body.voting_id, req.body.user_id);
         res.json(results);
@@ -108,5 +107,18 @@ router.get('/get-question/:id', async (req,res,next) => {
 
 });
 
+//---- statistika na otazku  
+// ---- getQuestionStats
+router.get('/get-question-stats/:id', async (req,res,next) => {
+    try {
+        let results = await db.getQuestionStats(req.params.id);
+        res.json(results);
+    } catch(e) {
+        res.status(401).json( {
+            message: e
+        });
+    }
+
+});
 
 module.exports = router;

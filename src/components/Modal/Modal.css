@@ -2,7 +2,7 @@
     position: fixed;
     z-index: 500;
     background-color: white;
-    width: 70%;
+    width: 50%;
     border: 1px solid #ccc;
     box-shadow: 1px 1px 1px black;
     padding: 16px;
@@ -25,4 +25,7 @@
 .h3-custom{
     padding-left: 10px;
     padding-top: 20px;
+}
+.h5-custom{
+    padding-left: 10px;
 }

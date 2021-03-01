@@ -17,16 +17,105 @@ import Axios from "axios";
 
 const useStyles = makeStyles(styles);
 
-const openModal = (voting_id) =>{
 
-  console.log("ID V MODAL :   " + voting_id);
+const openModal = (question_id, otvorene) =>{
+   console.log("otvorene");
+   console.log(otvorene);
+  let hlavicka=[];
+  let QuestionParams=[];
+  let Odpovede=[];
 
-  //q-a-count
-  /*
-  let counts=[[]];
-  Axios.get('http://localhost:4001/questions/q-a-count/' + voting_id)
+  // nacitanie hlavicky otazky name - wording
+  Axios.get('http://localhost:4001/questions/get-question/' + question_id)
     .then(res => {
-      counts = res.data;
+      hlavicka = res.data;
+      //console.log("== hlavicka");
+      //console.log(res.data)
+
+      //ked sme nacitali hlavicku tak ideme dalej
+      // nacitanie parametrov otazky accept_answ - secret
+      Axios.get('http://localhost:4001/questions/getQuestionParams/' + question_id)
+      .then(res => {
+        QuestionParams = res.data;
+        
+        console.log("prijimam odpovede?")
+        console.log(QuestionParams[0].accept_answ)
+        console.log(QuestionParams[0].accept_answ === 0);
+        if(QuestionParams[0].accept_answ === 0 && otvorene==='Áno'){
+          // nacitanie moznych odpovedi ak je mozne odpovedat
+            Axios.get('http://localhost:4001/questions/getAnswers/' + question_id)
+            .then(res => {
+              Odpovede = res.data;
+          ModalManager.open(<MyModal statsData="" otv={otvorene} otazka_id={question_id} hlavicka={hlavicka} odpovede={Odpovede} parametre={QuestionParams} onRequestClose={() => true}/>);
+        
+            })
+            .catch(err => {
+              if (err.response) {
+                //TODO: show error response from server
+                window.alert(err.response.data.message);
+                
+                console.log(err.response.data.message);
+                //this.setState({...this.state,error: err.response.data.message})
+              } else if (err.request) {
+                //TODO: msg internet connection..
+                window.alert("Internet connection failed.");
+              } else {
+                  //TODO: rly dont know what error can happend here but can happend :D
+                  window.alert("Something went wrong.");
+            }});
+          }else{
+            if(otvorene==='Nie'){
+              //nacitame statisticke data!!!
+              Axios.get('http://localhost:4001/questions/get-question-stats/' + question_id)
+                .then(res => {
+                  //Odpovede = res.data;
+                  //potrebujeme kus spracovat data. 
+                  let data={
+                    labels:[],
+                    series:[[]]
+                  }
+                  res.data.map((item)=>{
+                    data.labels.push(item.answer);
+                    data.series[0].push(item.count);
+
+                  });
+
+                  ModalManager.open(<MyModal statsData={data} otv={otvorene} otazka_id={question_id} hlavicka={hlavicka} odpovede="" parametre="" onRequestClose={() => true}/>);
+              
+                })
+                .catch(err => {
+                  if (err.response) {
+                    //TODO: show error response from server
+                    window.alert(err.response.data.message);
+                    
+                    console.log(err.response.data.message);
+                    //this.setState({...this.state,error: err.response.data.message})
+                  } else if (err.request) {
+                    //TODO: msg internet connection..
+                    window.alert("Internet connection failed.");
+                  } else {
+                      //TODO: rly dont know what error can happend here but can happend :D
+                      window.alert("Something went wrong.");
+                }});
+            }
+          }
+
+
+      })
+      .catch(err => {
+        if (err.response) {
+          //TODO: show error response from server
+          window.alert(err.response.data.message);
+          
+          console.log(err.response.data.message);
+          //this.setState({...this.state,error: err.response.data.message})
+        } else if (err.request) {
+          //TODO: msg internet connection..
+          window.alert("Internet connection failed.");
+        } else {
+            //TODO: rly dont know what error can happend here but can happend :D
+            window.alert("Something went wrong.");
+      }});
     })
     .catch(err => {
       if (err.response) {
@@ -34,43 +123,22 @@ const openModal = (voting_id) =>{
         window.alert(err.response.data.message);
         
         console.log(err.response.data.message);
-        this.setState({...this.state,error: err.response.data.message})
+        //this.setState({...this.state,error: err.response.data.message})
       } else if (err.request) {
         //TODO: msg internet connection..
         window.alert("Internet connection failed.");
       } else {
           //TODO: rly dont know what error can happend here but can happend :D
           window.alert("Something went wrong.");
-    }});*/
+    }});
+
+    //console.log("QP "+QuestionParams.accept_answ)
+    //console.log(QuestionParams.accept_answ === 0)
+    
 
 
-  //urobime loop nad datami
-  //let datas = this.state.Votings;
-  // ----- nacitanie otazok k votingom.
-/*
-  Axios.get('http://localhost:4001/questions/qawording/' + voting_id)
-    .then(res => {
-      let datas = [[]];
-      datas=res.data;
-      
-      ModalManager.open(<MyModal params={datas} acount={counts} onRequestClose={() => true}/>);
-    })
-    .catch(err => {
-      if (err.response) {
-        //TODO: show error response from server
-        window.alert(err.response.data.message);
-        
-        console.log(err.response.data.message);
-        this.setState({...this.state,error: err.response.data.message})
-      } else if (err.request) {
-        //TODO: msg internet connection..
-        window.alert("Internet connection failed.");
-      } else {
-          //TODO: rly dont know what error can happend here but can happend :D
-          window.alert("Something went wrong.");
-    }});*/
 
-  
+    
 }
 
 export default function CustomTable(props) {
@@ -106,7 +174,7 @@ export default function CustomTable(props) {
                   
 
                 <TableCell className={classes.tableCell} >
-                <Button onClick={openModal.bind(this, propup.id_question)}>DETAIL</Button>
+                <Button onClick={openModal.bind(this, propup.id_question,propup.otvorene)}>DETAIL</Button>
                 </TableCell>
               </TableRow>
             );

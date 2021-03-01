@@ -21,7 +21,7 @@ import Person from "@material-ui/icons/Person";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
-import TableListClass from "views/TableList/TableListClass.js";
+import TableListClass from "views/TableList/TableListClassMalySnem.js";
 import Logout from 'views/LogOut/LogOut';
 // core components/views for RTL layout
 
