@@ -73,7 +73,6 @@ class MyModal extends Component{
       let SetVoteParamsNew = { 
          answer_id:answer_id,
          question_id:quest_id,
-         voting_id:1,
          user_id:parseInt(localStorage.getItem("token"),10)
         };
         let SetMarkVotedParamsNew = { 
@@ -84,7 +83,6 @@ class MyModal extends Component{
       let SetVoteParamsNew_tajna = { 
          answer_id:answer_id,
          question_id:quest_id,
-         voting_id:1,
          user_id:null
          };
          let SetMarkVotedParamsNew_tajna = { 
