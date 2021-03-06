@@ -78,7 +78,7 @@ class  TableListClassMalySnem extends Component {
  }
 
   loadDataAfterSuccessLogin = () => {
-    this.loadInitQuestionsData(2,parseInt(localStorage.getItem("token"),10));
+    this.loadInitQuestionsData(1,parseInt(localStorage.getItem("token"),10));
   }
 
   loadInitQuestionsData =(id_voting,id_user) =>{

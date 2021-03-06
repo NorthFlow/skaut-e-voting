@@ -19,8 +19,8 @@ const useStyles = makeStyles(styles);
 
 
 const openModal = (question_id, otvorene) =>{
-   console.log("otvorene");
-   console.log(otvorene);
+  //console.log("otvorene");
+   //console.log(otvorene);
   let hlavicka=[];
   let QuestionParams=[];
   let Odpovede=[];
@@ -38,15 +38,20 @@ const openModal = (question_id, otvorene) =>{
       .then(res => {
         QuestionParams = res.data;
         
-        console.log("prijimam odpovede?")
-        console.log(QuestionParams[0].accept_answ)
-        console.log(QuestionParams[0].accept_answ === 0);
-        if(QuestionParams[0].accept_answ === 0 && otvorene==='Áno'){
+        //console.log("prijimam odpovede?")
+        //console.log(QuestionParams[0].accept_answ)
+        //console.log(QuestionParams[0].accept_answ === 0);
+        //console.log("==== big if")
+        //console.log(QuestionParams[0].accept_answ )
+        //console.log(otvorene)
+        //console.log(QuestionParams[0].accept_answ === 1 && otvorene==='Áno')
+
+        if(QuestionParams[0].accept_answ === 1 && otvorene==='Áno'){
           // nacitanie moznych odpovedi ak je mozne odpovedat
             Axios.get('http://localhost:4001/questions/getAnswers/' + question_id)
             .then(res => {
               Odpovede = res.data;
-          ModalManager.open(<MyModal statsData="" otv={otvorene} otazka_id={question_id} hlavicka={hlavicka} odpovede={Odpovede} parametre={QuestionParams} onRequestClose={() => true}/>);
+          ModalManager.open(<MyModal statsData="data" secret={QuestionParams[0].secret} otv={otvorene} otazka_id={question_id} hlavicka={hlavicka} odpovede={Odpovede} parametre={QuestionParams} onRequestClose={() => true}/>);
         
             })
             .catch(err => {
@@ -80,7 +85,7 @@ const openModal = (question_id, otvorene) =>{
 
                   });
 
-                  ModalManager.open(<MyModal statsData={data} otv={otvorene} otazka_id={question_id} hlavicka={hlavicka} odpovede="" parametre="" onRequestClose={() => true}/>);
+                  ModalManager.open(<MyModal statsData={data} secret={QuestionParams[0].secret} otv={otvorene} otazka_id={question_id} hlavicka={hlavicka} odpovede="" parametre="" onRequestClose={() => true}/>);
               
                 })
                 .catch(err => {

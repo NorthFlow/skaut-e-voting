@@ -9,14 +9,8 @@ import Axios from 'axios';
 
 
 // core components
-import GridItem from "../Grid/GridItem.js";
-import GridContainer from "../Grid/GridContainer.js";
 import Card from "../Card/Card";
 import CardHeader from "../Card/CardHeader.js";
-import CardIcon from "../Card/CardIcon.js";
-import CardBody from "../Card/CardBody.js";
-import CardFooter from "../Card/CardFooter.js";
-
 
 import {
    questionStatsParams
@@ -71,74 +65,126 @@ class MyModal extends Component{
     }
     
 
-    handleClick=(answer_id,quest_id)=>{
+    handleClick=(answer_id,quest_id,is_secret)=>{
       //onRequestClose
       console.log("CLICKED "+answer_id)
 
+      //pouzijeme ak je volba NEtajna
       let SetVoteParamsNew = { 
          answer_id:answer_id,
          question_id:quest_id,
-         voting_id:2,
+         voting_id:1,
          user_id:parseInt(localStorage.getItem("token"),10)
         };
         let SetMarkVotedParamsNew = { 
          question_id:quest_id,
          user_id:parseInt(localStorage.getItem("token"),10)
         };
+      //pouzijeme ak je volba TAJNA
+      let SetVoteParamsNew_tajna = { 
+         answer_id:answer_id,
+         question_id:quest_id,
+         voting_id:1,
+         user_id:null
+         };
+         let SetMarkVotedParamsNew_tajna = { 
+         question_id:quest_id,
+         user_id:null
+         };
    
-   
-       console.log("updatneute data po clicknuti")
-       console.log(SetVoteParamsNew);
-       console.log(SetMarkVotedParamsNew);
-       
-       Axios.post('http://localhost:4001/voting/set-vote' , SetVoteParamsNew)
-       .then(res => {
-         console("SET VOTE DONE");
-       //ak toto preslo ok tak ulozime este info ze uzivatel hlasoval
-   
-       Axios.post('http://localhost:4001/voting/set-mark-voted' , SetMarkVotedParamsNew)
-       .then(res => {
-         console("SET MARK VOTED DONE");
-   
-         window.location.reload(false);
-   
-       })
-       .catch(err => {
-         if (err.response) {
-           //TODO: show error response from server
-           window.alert(err.response.data.message);
-           
-           console.log(err.response.data.message);
-           this.setState({...this.state,error: err.response.data.message})
-         } else if (err.request) {
-           //TODO: msg internet connection..
-           window.alert("Internet connection failed.");
-         } else {
-             //TODO: rly dont know what error can happend here but can happend :D
-             window.alert("Something went wrong.");
-       }});
-       })
-       .catch(err => {
-         if (err.response) {
-           //TODO: show error response from server
-           window.alert(err.response.data.message);
-           
-           console.log(err.response.data.message);
-           this.setState({...this.state,error: err.response.data.message})
-         } else if (err.request) {
-           //TODO: msg internet connection..
-           window.alert("Internet connection failed.");
-         } else {
-             //TODO: rly dont know what error can happend here but can happend :D
-             window.alert("Something went wrong.");
-       }});
+         if(is_secret===1){
+            Axios.post('http://localhost:4001/voting/set-vote' , SetVoteParamsNew_tajna)
+            .then(res => {
+               console("SET VOTE DONE");
+            //ak toto preslo ok tak ulozime este info ze uzivatel hlasoval
+         
+            Axios.post('http://localhost:4001/voting/set-mark-voted' , SetMarkVotedParamsNew_tajna)
+            .then(res => {
+               console("SET MARK VOTED DONE");
+         
+               window.location.reload(false);
+         
+            })
+            .catch(err => {
+               if (err.response) {
+               //TODO: show error response from server
+               window.alert(err.response.data.message);
+               
+               console.log(err.response.data.message);
+               this.setState({...this.state,error: err.response.data.message})
+               } else if (err.request) {
+               //TODO: msg internet connection..
+               window.alert("Internet connection failed.");
+               } else {
+                  //TODO: rly dont know what error can happend here but can happend :D
+                  window.alert("Something went wrong.");
+            }});
+            })
+            .catch(err => {
+               if (err.response) {
+               //TODO: show error response from server
+               window.alert(err.response.data.message);
+               
+               console.log(err.response.data.message);
+               this.setState({...this.state,error: err.response.data.message})
+               } else if (err.request) {
+               //TODO: msg internet connection..
+               window.alert("Internet connection failed.");
+               } else {
+                  //TODO: rly dont know what error can happend here but can happend :D
+                  window.alert("Something went wrong.");
+            }});
+         }else{
+            Axios.post('http://localhost:4001/voting/set-vote' , SetVoteParamsNew)
+            .then(res => {
+               console("SET VOTE DONE");
+            //ak toto preslo ok tak ulozime este info ze uzivatel hlasoval
+         
+            Axios.post('http://localhost:4001/voting/set-mark-voted' , SetMarkVotedParamsNew)
+            .then(res => {
+               console("SET MARK VOTED DONE");
+         
+               window.location.reload(false);
+         
+            })
+            .catch(err => {
+               if (err.response) {
+               //TODO: show error response from server
+               window.alert(err.response.data.message);
+               
+               console.log(err.response.data.message);
+               this.setState({...this.state,error: err.response.data.message})
+               } else if (err.request) {
+               //TODO: msg internet connection..
+               window.alert("Internet connection failed.");
+               } else {
+                  //TODO: rly dont know what error can happend here but can happend :D
+                  window.alert("Something went wrong.");
+            }});
+            })
+            .catch(err => {
+               if (err.response) {
+               //TODO: show error response from server
+               window.alert(err.response.data.message);
+               
+               console.log(err.response.data.message);
+               this.setState({...this.state,error: err.response.data.message})
+               } else if (err.request) {
+               //TODO: msg internet connection..
+               window.alert("Internet connection failed.");
+               } else {
+                  //TODO: rly dont know what error can happend here but can happend :D
+                  window.alert("Something went wrong.");
+            }});
+         }
        
     }
 
    render(){
-      const { statsData,otv,otazka_id,hlavicka,odpovede,parametre, onRequestClose } = this.props;
+      const { statsData,secret,otv,otazka_id,hlavicka,odpovede,parametre, onRequestClose } = this.props;
       //console.log(hlavicka[0].name)
-      //console.log(odpovede)
+      console.log(" /// odpovede")
+      console.log(odpovede)
       //console.log(parametre)
       //console.log("------ stats data in modal")
       //console.log(statsData);
@@ -155,7 +201,7 @@ class MyModal extends Component{
                   <p className='h5-custom'>{ hlavicka[0].wording } </p>
 
                {odpovede.map((item,index)=>{
-                  return <SquareButton key={index} clicked={() => this.handleClick(item.id_answer,otazka_id)}>{item.answer } </SquareButton>
+                  return <SquareButton key={index} clicked={() => this.handleClick(item.id_answer,otazka_id,secret)}>{item.answer } </SquareButton>
                }
                )} 
             </Modal>
