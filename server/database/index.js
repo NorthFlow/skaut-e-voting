@@ -196,7 +196,7 @@ userdb.getQInVoting = (voting_id) => {
 }
 
 // --- OK poznačenie že používateľ hlasoval v danej otázke
-userdb.setMarkVoted = (question_id, user_id) => {
+userdb.setMarkVoted = (user_id, question_id) => {
     return new Promise((resolve, reject) => {
         connection.query(`INSERT INTO user_voting(id_user,id_question) 
         VALUES (?,?)`, [user_id, question_id], (err, result) => {
@@ -212,7 +212,7 @@ userdb.setMarkVoted = (question_id, user_id) => {
 userdb.setVote = (answer_id, question_id, user_id) => {
     return new Promise((resolve, reject) => {
         connection.query(`INSERT INTO votes(id_answer, id_question, id_user) 
-        VALUES (?,?,?) `, [answer_id, question_id, user_id], (err, result) => {
+        VALUES (?,?,?)`, [answer_id, question_id, user_id], (err, result) => {
             if (err) {
                 return reject(err);
             }
@@ -289,7 +289,7 @@ userdb.getAvailableVoting = (user_id) => {
 
 // --- OK vráti zoznam otázok pre konkrétny voting
 userdb.getVotingQuestions = (voting_id, user_id) => {
-    console.log("---------- voting: " + voting_id + " user:" + user_id);
+    //console.log("---------- voting: " + voting_id + " user:" + user_id);
     return new Promise((resolve, reject) => {
         connection.query(`SELECT id_question ,name , CASE accept_answ 
         WHEN 0 THEN 'Nie' WHEN 1 THEN 'Áno' END AS otvorene , CASE secret WHEN 0 THEN 'Nie' 

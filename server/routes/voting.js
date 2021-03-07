@@ -61,8 +61,10 @@ router.get('/checkCanVote/:id_v:id_u', async (req,res,next) => {
 
 // ------------ inserty
 router.post('/set-vote', async (req,res,next) => {
+    //console.log(req.body)
     try {
         let results = await db.setVote(req.body.answer_id, req.body.question_id, req.body.user_id);
+        //console.log(results);
         res.json(results);
     } catch(e) {
         res.status(404).json( {
@@ -72,8 +74,10 @@ router.post('/set-vote', async (req,res,next) => {
 });
 
 router.post('/set-mark-voted', async (req,res,next) => {
+    //console.log(req.body.user_id)
+    //console.log(eq.body.question_id)
     try {
-        let results = await db.setMarkVoted(req.body.question_id, req.body.user_id);
+        let results = await db.setMarkVoted(req.body.user_id, req.body.question_id);
         res.json(results);
     } catch(e) {
         res.status(404).json( {

@@ -10,14 +10,6 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 
-
-import MyModal from "../../components/Modal/MyModal";
-import MyModalSimple from "../../components/Modal/MyModalSImple";
-import { ModalManager} from 'react-dynamic-modal';
-import  Combobox  from 'react-responsive-combo-box';
-import { Modal,Effect} from 'react-dynamic-modal';
-import SquareButton from '../../components/CustomButtons/SquareButton';
-
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
@@ -64,18 +56,11 @@ class  TableListClassMalySnem extends Component {
       },
       SelectedVoting: '999999'
     };
-
-    //this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
     this.loadDataAfterSuccessLogin();
   }
-
-  openModal =(voting_id) =>{
-    //this.loadQuestionAnswerData(voting_id);
-    //ModalManager.open(<MyModal params={this.state.QandA} onRequestClose={() => true}/>);
- }
 
   loadDataAfterSuccessLogin = () => {
     this.loadInitQuestionsData(1,parseInt(localStorage.getItem("token"),10));
@@ -86,12 +71,11 @@ class  TableListClassMalySnem extends Component {
       voting_id:id_voting,
       user_id:id_user
      };
-
     this.setState({
       TableParams: TableParamsNew,
     });
 
-    //Ako krok cislo dva si nacitame otazky votingu na pozicii 0
+    //Ako krok cislo jedna si nacitame otazky votingu na pozicii 0
     Axios.post('http://localhost:4001/questions/get-voting-questions' , TableParamsNew)
     .then(res => {
       this.setState({
@@ -103,45 +87,8 @@ class  TableListClassMalySnem extends Component {
     this.setState({
       SelectedVoting: id_voting,
     });
-    //console.log("menime selectedvoting na :"+this.state.SelectedVoting);
     this.forceUpdate();
 
-    })
-    .catch(err => {
-      if (err.response) {
-        //TODO: show error response from server
-        window.alert(err.response.data.message);
-        
-        console.log(err.response.data.message);
-        this.setState({...this.state,error: err.response.data.message})
-      } else if (err.request) {
-        //TODO: msg internet connection..
-        window.alert("Internet connection failed.");
-      } else {
-          //TODO: rly dont know what error can happend here but can happend :D
-          window.alert("Something went wrong.");
-    }});
-  }
-
-  loadQuestionAnswerData = (voting_id) =>{
-    // ----- nacitanie otazok k votingom.
-    Axios.get('http://localhost:4001/questions/qawording/' + voting_id)
-    .then(res => {
-      //console.log("in then");
-      let tmpArray = [[]];
-      for(var i=0; i< res.data.length; i++){
-        var dataPom = [JSON.stringify(res.data[i].question), JSON.stringify(res.data[i].wording),JSON.stringify(res.data[i].id_answer), JSON.stringify(res.data[i].answer)];
-        //console.log("riadok> "+dataPom);
-        tmpArray.push(dataPom);
-      }
-      console.log(tmpArray)
-      this.setState({
-        QandA: tmpArray
-    })
-
-    let datas = this.state.QandA.filter((e, i) => i !== 0);
-    this.setState({ QandA : datas });
-    
     })
     .catch(err => {
       if (err.response) {

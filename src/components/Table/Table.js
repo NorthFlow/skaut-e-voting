@@ -18,7 +18,7 @@ import Axios from "axios";
 const useStyles = makeStyles(styles);
 
 
-const openModal = (question_id, otvorene) =>{
+const openModal = (question_id, otvorene, hlasoval) =>{
   //console.log("otvorene");
    //console.log(otvorene);
   let hlavicka=[];
@@ -45,8 +45,9 @@ const openModal = (question_id, otvorene) =>{
         //console.log(QuestionParams[0].accept_answ )
         //console.log(otvorene)
         //console.log(QuestionParams[0].accept_answ === 1 && otvorene==='Áno')
-
-        if(QuestionParams[0].accept_answ === 1 && otvorene==='Áno'){
+        //console.log(hlasoval)    
+        
+        if(QuestionParams[0].accept_answ === 1 && otvorene==='Áno' && hlasoval==='Ešte nehlasované'){
           // nacitanie moznych odpovedi ak je mozne odpovedat
             Axios.get('http://localhost:4001/questions/getAnswers/' + question_id)
             .then(res => {
@@ -59,7 +60,7 @@ const openModal = (question_id, otvorene) =>{
                 //TODO: show error response from server
                 window.alert(err.response.data.message);
                 
-                console.log(err.response.data.message);
+                //console.log(err.response.data.message);
                 //this.setState({...this.state,error: err.response.data.message})
               } else if (err.request) {
                 //TODO: msg internet connection..
@@ -82,7 +83,6 @@ const openModal = (question_id, otvorene) =>{
                   res.data.map((item)=>{
                     data.labels.push(item.answer);
                     data.series[0].push(item.count);
-
                   });
 
                   ModalManager.open(<MyModal statsData={data} secret={QuestionParams[0].secret} otv={otvorene} otazka_id={question_id} hlavicka={hlavicka} odpovede="" parametre="" onRequestClose={() => true}/>);
@@ -93,7 +93,7 @@ const openModal = (question_id, otvorene) =>{
                     //TODO: show error response from server
                     window.alert(err.response.data.message);
                     
-                    console.log(err.response.data.message);
+                    //console.log(err.response.data.message);
                     //this.setState({...this.state,error: err.response.data.message})
                   } else if (err.request) {
                     //TODO: msg internet connection..
@@ -102,6 +102,10 @@ const openModal = (question_id, otvorene) =>{
                       //TODO: rly dont know what error can happend here but can happend :D
                       window.alert("Something went wrong.");
                 }});
+            }else{
+              if(hlasoval==='Už zahlasované'){
+                window.alert("Už si hlasoval/a.");
+              }
             }
           }
 
@@ -148,6 +152,7 @@ const openModal = (question_id, otvorene) =>{
 
 export default function CustomTable(props) {
   const classes = useStyles();
+ 
   const { tableHead, tableData, tableHeaderColor } = props;
   return (
     <div className={classes.tableResponsive}>
@@ -169,25 +174,27 @@ export default function CustomTable(props) {
           </TableHead>
         ) : null}
         <TableBody>
-          {tableData.map((propup, key) => {
-            return (
-              <TableRow key={key} className={classes.tableBodyRow}>
-                  
-                    <TableCell className={classes.tableCell} >
-                      {propup.name}
-                    </TableCell>
-                  
-
-                <TableCell className={classes.tableCell} >
-                <Button onClick={openModal.bind(this, propup.id_question,propup.otvorene)}>DETAIL</Button>
-                </TableCell>
-              </TableRow>
-            );
-          })}
+          { tableData !== undefined ?(
+            tableData.map((propup, key) => {
+              return (
+                <TableRow key={key} className={classes.tableBodyRow}>
+                    
+                      <TableCell className={classes.tableCell} >
+                        {propup.name}
+                      </TableCell>
+                    
+  
+                  <TableCell className={classes.tableCell} >
+                  <Button onClick={openModal.bind(this, propup.id_question,propup.otvorene,propup.hlasovane)}>DETAIL</Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })
+          ): null}
         </TableBody>
       </Table>
     </div>
-  );
+  ); 
 }
 
 CustomTable.defaultProps = {

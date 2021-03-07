@@ -2,11 +2,9 @@ import React,{Component} from 'react';
 import { Modal,Effect} from 'react-dynamic-modal';
 import SquareButton from '../CustomButtons/SquareButton';
 import { makeStyles } from "@material-ui/core/styles";
-import Aux from '../hoc/AuxComponent';
 import ChartistGraph from "react-chartist";
 import './Modal.css';
 import Axios from 'axios';
-
 
 // core components
 import Card from "../Card/Card";
@@ -67,7 +65,7 @@ class MyModal extends Component{
 
     handleClick=(answer_id,quest_id,is_secret)=>{
       //onRequestClose
-      console.log("CLICKED "+answer_id)
+      //console.log("CLICKED "+answer_id)
 
       //pouzijeme ak je volba NEtajna
       let SetVoteParamsNew = { 
@@ -76,8 +74,8 @@ class MyModal extends Component{
          user_id:parseInt(localStorage.getItem("token"),10)
         };
         let SetMarkVotedParamsNew = { 
-         question_id:quest_id,
-         user_id:parseInt(localStorage.getItem("token"),10)
+         user_id:parseInt(localStorage.getItem("token"),10),
+         question_id:quest_id
         };
       //pouzijeme ak je volba TAJNA
       let SetVoteParamsNew_tajna = { 
@@ -85,63 +83,21 @@ class MyModal extends Component{
          question_id:quest_id,
          user_id:null
          };
-         let SetMarkVotedParamsNew_tajna = { 
-         question_id:quest_id,
-         user_id:null
-         };
-   
+         //console.log("is secret:"+is_secret)
+
          if(is_secret===1){
+            console.log(SetVoteParamsNew_tajna)
+
             Axios.post('http://localhost:4001/voting/set-vote' , SetVoteParamsNew_tajna)
             .then(res => {
-               console("SET VOTE DONE");
-            //ak toto preslo ok tak ulozime este info ze uzivatel hlasoval
-         
-            Axios.post('http://localhost:4001/voting/set-mark-voted' , SetMarkVotedParamsNew_tajna)
-            .then(res => {
-               console("SET MARK VOTED DONE");
-         
-               window.location.reload(false);
-         
-            })
-            .catch(err => {
-               if (err.response) {
-               //TODO: show error response from server
-               window.alert(err.response.data.message);
-               
-               console.log(err.response.data.message);
-               this.setState({...this.state,error: err.response.data.message})
-               } else if (err.request) {
-               //TODO: msg internet connection..
-               window.alert("Internet connection failed.");
-               } else {
-                  //TODO: rly dont know what error can happend here but can happend :D
-                  window.alert("Something went wrong.");
-            }});
-            })
-            .catch(err => {
-               if (err.response) {
-               //TODO: show error response from server
-               window.alert(err.response.data.message);
-               
-               console.log(err.response.data.message);
-               this.setState({...this.state,error: err.response.data.message})
-               } else if (err.request) {
-               //TODO: msg internet connection..
-               window.alert("Internet connection failed.");
-               } else {
-                  //TODO: rly dont know what error can happend here but can happend :D
-                  window.alert("Something went wrong.");
-            }});
-         }else{
-            Axios.post('http://localhost:4001/voting/set-vote' , SetVoteParamsNew)
-            .then(res => {
-               console("SET VOTE DONE");
+               console.log("SET VOTE DONE");
+               //console.log(res.results)
             //ak toto preslo ok tak ulozime este info ze uzivatel hlasoval
          
             Axios.post('http://localhost:4001/voting/set-mark-voted' , SetMarkVotedParamsNew)
             .then(res => {
-               console("SET MARK VOTED DONE");
-         
+               console.log("SET MARK VOTED DONE");
+               console.log(res.results)
                window.location.reload(false);
          
             })
@@ -151,6 +107,52 @@ class MyModal extends Component{
                window.alert(err.response.data.message);
                
                console.log(err.response.data.message);
+               this.setState({...this.state,error: err.response.data.message})
+               } else if (err.request) {
+               //TODO: msg internet connection..
+               window.alert("Internet connection failed.");
+               } else {
+                  //TODO: rly dont know what error can happend here but can happend :D
+                  window.alert("Something went wrong.");
+            }});
+            })
+            .catch(err => {
+               if (err.response) {
+               //TODO: show error response from server
+               window.alert(err.response.data.message);
+               
+               console.log(err.response.data.message);
+               this.setState({...this.state,error: err.response.data.message})
+               } else if (err.request) {
+               //TODO: msg internet connection..
+               window.alert("Internet connection failed.");
+               //console.log("internte connection failed");
+               } else {
+                  //TODO: rly dont know what error can happend here but can happend :D
+                  window.alert("Something went wrong.");
+                  //console.log("something went wrong?!");
+            }});
+            
+         }else{
+            console.log(SetVoteParamsNew)
+            Axios.post('http://localhost:4001/voting/set-vote' , SetVoteParamsNew)
+            .then(res => {
+               //console.log("SET VOTE DONE");
+               console.log(res.results)
+            //ak toto preslo ok tak ulozime este info ze uzivatel hlasoval
+         
+            Axios.post('http://localhost:4001/voting/set-mark-voted' , SetMarkVotedParamsNew)
+            .then(res => {
+               //console.log("SET MARK VOTED DONE");
+               console.log(res.results)
+         
+               window.location.reload(false);
+         
+            })
+            .catch(err => {
+               if (err.response) {
+               //TODO: show error response from server
+               window.alert(err.response.data.message);
                this.setState({...this.state,error: err.response.data.message})
                } else if (err.request) {
                //TODO: msg internet connection..
@@ -176,40 +178,48 @@ class MyModal extends Component{
             }});
          }
        
+         
     }
 
    render(){
       const { statsData,secret,otv,otazka_id,hlavicka,odpovede,parametre, onRequestClose } = this.props;
       //console.log(hlavicka[0].name)
-      console.log(" /// odpovede")
-      console.log(odpovede)
+      //console.log(" /// odpovede")
+      //console.log(odpovede)
       //console.log(parametre)
       //console.log("------ stats data in modal")
       //console.log(statsData);
+      //console.log("otvorene: "+otv)
            
       if(otv==='Áno'){
 
          return (
-            <Modal
+            <div style={{textAlign: 'center'}}>
+               <Modal
                onRequestClose={onRequestClose}
                effect={Effect.SlideFromBottom}
-               className={this.state.classes.content,this.state.classes.overlay}
                >
-                  <h3 className='h3-custom'>{ hlavicka[0].name } </h3>
-                  <p className='h5-custom'>{ hlavicka[0].wording } </p>
+                     <h3 className='h3-custom'>{ hlavicka[0].name } </h3>
+                     <p className='h5-custom'>{ hlavicka[0].wording } </p>
 
-               {odpovede.map((item,index)=>{
-                  return <SquareButton key={index} clicked={() => this.handleClick(item.id_answer,otazka_id,secret)}>{item.answer } </SquareButton>
-               }
-               )} 
-            </Modal>
+                     <div style={{paddingBottom: '40px'}}>
+                     {odpovede.map((item,index)=>{
+                        return <SquareButton key={index} clicked={() => this.handleClick(item.id_answer,otazka_id,secret)}>{item.answer } </SquareButton>
+                     }
+                     )}
+                     </div>
+                  
+               </Modal>
+            </div>
+
+            
          );
       }else{
          return(
-            <Modal
+            <div style={{textAlign: 'center'}}>
+               <Modal
                onRequestClose={onRequestClose}
                effect={Effect.SlideFromBottom}
-               className={this.state.classes.content,this.state.classes.overlay}
                >
                   <h3 className='h3-custom'>{ hlavicka[0].name } </h3>
                   <p className='h5-custom'>{ hlavicka[0].wording } </p>
@@ -228,6 +238,8 @@ class MyModal extends Component{
                   </Card>
 
             </Modal>
+            </div>
+            
          )
       }
                

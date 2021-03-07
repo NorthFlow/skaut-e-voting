@@ -20,7 +20,6 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
-import { Link } from 'react-router-dom'
 
 import {
   dailySalesChart,
@@ -96,8 +95,8 @@ export default function Dashboard() {
               <CardIcon color="info">
                 <Accessibility />
               </CardIcon>
-              <p className={classes.cardCategory}>Prihlásení</p>
-              <h3 className={classes.cardTitle}>23</h3>
+              <p className={classes.cardCategory}>Počet delegátov</p>
+              <h3 className={classes.cardTitle}>28</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
