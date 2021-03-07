@@ -120,20 +120,20 @@ const emailsSubscriptionChart = {
 };
 
 // ##############################
-// // // Developerske hodiny
+// // // podujatia v rokoch
 // #############################
 
 const completedTasksChart = {
   data: {
-    labels: ["20", "21", "22", "23", "24","25","26","27"],
-    series: [[12,5,5,2,2,2,2,3],[5,5,10,5,4,1,1,0]]
+    labels: [2016,2017,2018,2019,2020],
+    series: [[2025,1999,2056,2121,1235]]
   },
   options: {
     lineSmooth: Chartist.Interpolation.cardinal({
       tension: 0
     }),
     low: 0,
-    high: 15, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+    high: 2500, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
     chartPadding: {
       top: 0,
       right: 0,

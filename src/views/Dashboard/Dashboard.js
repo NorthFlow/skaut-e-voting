@@ -167,12 +167,12 @@ export default function Dashboard() {
               />
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Developerské hodiny</h4>
-              <p className={classes.cardCategory}>Čas strávený vývojom tejto aplikácie. Pre vás.</p>
+              <h4 className={classes.cardTitle}>Počet akcií</h4>
+              <p className={classes.cardCategory}>Počet nahlásených akcií od roku 2016.</p>
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>
-                <AccessTime /> práca dvoch developerov
+                <AccessTime /> dáta z výročných správ a systému Tee-pee
               </div>
             </CardFooter>
           </Card>
