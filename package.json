@@ -26,7 +26,7 @@
     "react-swipeable-views": "0.13.9"
   },
   "scripts": {
-    "start": "npm run server start",
+    "start": "npm run server start01",
     "start01": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
