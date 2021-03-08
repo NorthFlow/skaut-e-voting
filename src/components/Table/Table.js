@@ -26,7 +26,7 @@ const openModal = (question_id, otvorene, hlasoval) =>{
   let Odpovede=[];
 
   // nacitanie hlavicky otazky name - wording
-  Axios.get('http://localhost:4001/questions/get-question/' + question_id)
+  Axios.get('/questions/get-question/' + question_id)
     .then(res => {
       hlavicka = res.data;
       //console.log("== hlavicka");
@@ -34,7 +34,7 @@ const openModal = (question_id, otvorene, hlasoval) =>{
 
       //ked sme nacitali hlavicku tak ideme dalej
       // nacitanie parametrov otazky accept_answ - secret
-      Axios.get('http://localhost:4001/questions/getQuestionParams/' + question_id)
+      Axios.get('/questions/getQuestionParams/' + question_id)
       .then(res => {
         QuestionParams = res.data;
         
@@ -49,7 +49,7 @@ const openModal = (question_id, otvorene, hlasoval) =>{
         
         if(QuestionParams[0].accept_answ === 1 && otvorene==='Áno' && hlasoval==='Ešte nehlasované'){
           // nacitanie moznych odpovedi ak je mozne odpovedat
-            Axios.get('http://localhost:4001/questions/getAnswers/' + question_id)
+            Axios.get('/questions/getAnswers/' + question_id)
             .then(res => {
               Odpovede = res.data;
           ModalManager.open(<MyModal statsData="data" secret={QuestionParams[0].secret} otv={otvorene} otazka_id={question_id} hlavicka={hlavicka} odpovede={Odpovede} parametre={QuestionParams} onRequestClose={() => true}/>);
@@ -72,7 +72,7 @@ const openModal = (question_id, otvorene, hlasoval) =>{
           }else{
             if(otvorene==='Nie'){
               //nacitame statisticke data!!!
-              Axios.get('http://localhost:4001/questions/get-question-stats/' + question_id)
+              Axios.get('/questions/get-question-stats/' + question_id)
                 .then(res => {
                   //Odpovede = res.data;
                   //potrebujeme kus spracovat data. 

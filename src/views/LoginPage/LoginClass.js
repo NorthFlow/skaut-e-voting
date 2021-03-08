@@ -72,7 +72,7 @@ class LoginClass extends Component{
 
   login = event => {
     this.setState({ error: '' });
-    Axios.post('http://localhost:4001/user/login', this.state.loginParams)
+    Axios.post('/user/login', this.state.loginParams)
       .then(res => {
         console.log('success login', res.data)
         

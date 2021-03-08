@@ -76,7 +76,7 @@ class  TableListClassMalySnem extends Component {
     });
 
     //Ako krok cislo jedna si nacitame otazky votingu na pozicii 0
-    Axios.post('http://localhost:4001/questions/get-voting-questions' , TableParamsNew)
+    Axios.post('/questions/get-voting-questions' , TableParamsNew)
     .then(res => {
       this.setState({
         Questions: res.data,

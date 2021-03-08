@@ -88,13 +88,13 @@ class MyModal extends Component{
          if(is_secret===1){
             console.log(SetVoteParamsNew_tajna)
 
-            Axios.post('http://localhost:4001/voting/set-vote' , SetVoteParamsNew_tajna)
+            Axios.post('/voting/set-vote' , SetVoteParamsNew_tajna)
             .then(res => {
                console.log("SET VOTE DONE");
                //console.log(res.results)
             //ak toto preslo ok tak ulozime este info ze uzivatel hlasoval
          
-            Axios.post('http://localhost:4001/voting/set-mark-voted' , SetMarkVotedParamsNew)
+            Axios.post('/voting/set-mark-voted' , SetMarkVotedParamsNew)
             .then(res => {
                console.log("SET MARK VOTED DONE");
                console.log(res.results)
@@ -135,13 +135,13 @@ class MyModal extends Component{
             
          }else{
             console.log(SetVoteParamsNew)
-            Axios.post('http://localhost:4001/voting/set-vote' , SetVoteParamsNew)
+            Axios.post('/voting/set-vote' , SetVoteParamsNew)
             .then(res => {
                //console.log("SET VOTE DONE");
                console.log(res.results)
             //ak toto preslo ok tak ulozime este info ze uzivatel hlasoval
          
-            Axios.post('http://localhost:4001/voting/set-mark-voted' , SetMarkVotedParamsNew)
+            Axios.post('/voting/set-mark-voted' , SetMarkVotedParamsNew)
             .then(res => {
                //console.log("SET MARK VOTED DONE");
                console.log(res.results)
