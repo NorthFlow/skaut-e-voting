@@ -26,7 +26,7 @@ app.use('/login', (req, res) => {
 app.use(express.json());
 
 
-app.listen(process.env.PORT || '4001', () => {
+app.listen(process.env.PORT || 4001, () => {
     console.log(`Server is running in port : ${process.env.PORT || '4001'}`);
 });
 
