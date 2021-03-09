@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-      "start": "npm start"
+      "start": "node-env-run index.js --exec"
    },
     "author": "",
     "license": "ISC",
