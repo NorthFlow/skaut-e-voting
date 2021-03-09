@@ -26,8 +26,9 @@
     "react-swipeable-views": "0.13.9"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start-client": "start client",
+    "start":"cd server && start",
+    "build": "react-scripts build && (cd server && npm install)",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",

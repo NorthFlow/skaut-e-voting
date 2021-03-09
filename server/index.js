@@ -10,6 +10,10 @@ const apiRouterQuestions = require('./routes/questions');
 const cors = require('cors');
 
 const app = express();
+
+//const buildPath = path.join(__dirname, '..', 'build');
+//app.use(express.static(buildPath));
+
 //app.use(bodyParser.urlencoded({ extended: false }));
 //app.use(pino);
 
